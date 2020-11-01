@@ -1,0 +1,8 @@
+# IDE specifics
+./idea
+
+# Maven
+/target
+
+# test files
+user_auto_increment_test.sql
