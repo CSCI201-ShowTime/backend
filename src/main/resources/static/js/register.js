@@ -12,14 +12,15 @@ document.querySelector("form").onsubmit = function(event) {
 		let lname = $("#lname").val();
 		$.ajax({
 			method: "POST",
-			url: "http://localhost:8080/api/auth",
-			data: {
+			url: "/api/user",
+			contentType: "application/json",
+			data: JSON.stringify({
 				username: email,
 	    		email: email,
-	    		firstname: fname,
-	    		lastname: lname,
+	    		fname: fname,
+	    		lname: lname,
 	    		password: password
-			}
+			})
 		})
 		.done(function(results) {
 			

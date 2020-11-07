@@ -26,31 +26,31 @@ public class User {
 
     @Column(name = "email", nullable = false, unique = true)
     @NotNull
-    private String email = "";
+    private String email;
 
     @Column(name = "username", nullable = false, unique = true)
     @NotNull
-    private String username = "";
+    private String username;
 
     @Column(name = "password", nullable = false, unique = true)
     @NotNull
-    private String password = "";
+    private String password;
 
     @Column(name = "fname", nullable = false)
     @NotNull
-    private String fname = "";
+    private String fname;
 
     @Column(name = "lname", nullable = false)
     @NotNull
-    private String lname = "";
+    private String lname;
 
     @Column(name = "latitude", nullable = false, unique = true)
     @NotNull
-    private double latitude = 91;
+    private double latitude;
 
     @Column(name = "longitude", nullable = false, unique = true)
     @NotNull
-    private double longitude = 181;
+    private double longitude;
 
     public User() {
 

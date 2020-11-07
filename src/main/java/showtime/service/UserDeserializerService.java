@@ -17,8 +17,7 @@ public class UserDeserializerService extends JsonDeserializer<User> {
 
     // special thanks to PiKeXi
     private static final Pattern pattern = Pattern.compile(
-            "/^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@" +
-                    "((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$/"
+            "^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"
     );
 
     @Override
@@ -41,7 +40,7 @@ public class UserDeserializerService extends JsonDeserializer<User> {
         String usernameStr = username == null || username.asText().equals("") ? email : username.asText();
         user.setUsername(usernameStr);
 
-        // password, required, not null
+        // password, required, not null, only tests if less than 8 characters
         String password = node.get("password").asText();
         if(password.trim().length() < 8) {
             throw new JsonProcessingException(password + " is not a valid password.") { };
@@ -70,7 +69,7 @@ public class UserDeserializerService extends JsonDeserializer<User> {
         // longitude, not null, default to 181
         JsonNode lon = node.get("longitude");
         double lonDouble = lon == null ? 181 : lon.asDouble();
-        user.setLatitude(lonDouble);
+        user.setLongitude(lonDouble);
 
         return user;
     }
