@@ -1,5 +1,6 @@
 package showtime.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class UserController {
     private UserRepository userRepo;
 
     @PostMapping("/user")
-    public ResponseEntity<User> registerNewUser(@RequestBody User user) {
+    public ResponseEntity<?> registerNewUser(@RequestBody User user) {
         Optional<User> userOpt = userRepo.findUserByEmail(user.getEmail());
         if(userOpt.isPresent()) {
             // user exists, 409 CONFLICT
