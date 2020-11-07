@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `showtime` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `showtime`;
 -- MySQL dump 10.13  Distrib 8.0.21, for Win64 (x86_64)
 --
 -- Host: localhost    Database: showtime
@@ -43,7 +45,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'def1@usc.edu','username','password','Tommy','Trojan',34.0224,-118.2851),(2,'def2@usc.edu','username2','password2','Dummy','Trojan',34.0224,-118.2851);
+INSERT INTO `user` VALUES (1,'def1@usc.edu','username','password','Tommy','Trojan',34.0224,-118.2851),(2,'def2@usc.edu','username2','password2','Dummy','Trojan',34.0224,-118.2851),(3,'def3@usc.edu','username3','password3','Gary','Guo',34.7466,113.6253),(4,'201fpsoo@gmail.com','201fpsoo','vadam201','Billy','Soo',31.2304,121.4737),(5,'uninit@example.com','username4','password4','John','Jackson',91,181);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-07 21:08:36
+-- Dump completed on 2020-11-08  1:16:08
