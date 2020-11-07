@@ -1,5 +1,8 @@
 package showtime.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import showtime.service.UserDeserializerService;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+@JsonDeserialize(using = UserDeserializerService.class)
 @Entity
 @Table(name = "user",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"ID"})}
@@ -22,31 +26,42 @@ public class User {
 
     @Column(name = "email", nullable = false, unique = true)
     @NotNull
-    private String email;
+    private String email = "";
 
-    @NotNull
     @Column(name = "username", nullable = false, unique = true)
-    private String username;
-
     @NotNull
+    private String username = "";
+
     @Column(name = "password", nullable = false, unique = true)
-    private String password;
-
     @NotNull
-    @Column(name = "firstName", nullable = false, unique = true)
-    private String firstName;
+    private String password = "";
 
+    @Column(name = "fname", nullable = false)
     @NotNull
-    @Column(name = "lastName", nullable = false, unique = true)
-    private String lastName;
+    private String fname = "";
 
+    @Column(name = "lname", nullable = false)
     @NotNull
+    private String lname = "";
+
     @Column(name = "latitude", nullable = false, unique = true)
-    private double latitude;
-
     @NotNull
+    private double latitude = 91;
+
     @Column(name = "longitude", nullable = false, unique = true)
-    private double longitude;
+    @NotNull
+    private double longitude = 181;
+
+    public User() {
+
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{id=%d,email=%s,username=%s,password=%s" +
+                ",fname=%s,lname=%s,latitude=%f,longitude=%f}",
+                id, email, username, password, fname, lname, latitude, longitude);
+    }
 
     public int getId() {
         return id;
@@ -80,20 +95,20 @@ public class User {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFname() {
+        return fname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFname(String firstName) {
+        this.fname = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLname() {
+        return lname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLname(String lastName) {
+        this.lname = lastName;
     }
 
     public double getLatitude() {

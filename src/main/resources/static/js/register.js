@@ -5,7 +5,36 @@ let validPassword = false;
 let validConfirmPassword = false;
 document.querySelector("form").onsubmit = function(event) {
 	event.preventDefault();
-	console.log("submit");
+	if (validFname && validLname && validEmail && validPassword && validConfirmPassword) {
+		let email = $("#email").val();
+		let password = $("#password").val();
+		let fname = $("#fname").val();
+		let lname = $("#lname").val();
+		$.ajax({
+			method: "POST",
+			url: "http://localhost:8080/api/auth",
+			data: {
+				username: email,
+	    		email: email,
+	    		firstname: fname,
+	    		lastname: lname,
+	    		password: password
+			}
+		})
+		.done(function(results) {
+			
+
+		})
+		.fail(function( jqXHR, textStatus, errorThrown ) {
+			if (jqXHR.status == 409) {
+				alert( "This email is already taken!" );
+			} else {
+				console.log("error!");
+			}
+		});
+	} else {
+		alert("Please fulfill all requirements first!");
+	}
 }
 
 // validation of first name
@@ -78,6 +107,15 @@ document.querySelector("#password").oninput = function() {
 			document.querySelector("#password-note").style.display = "none";
 			validPassword = true;
 		}
+	}
+	if (document.querySelector("#confirmPassword").value != this.value) {
+		document.querySelector("#confirmPassword-error").style.display = "inline";
+		document.querySelector("#confirmPassword").classList.add("is-invalid");
+		validConfirmPassword = false;
+	} else {
+		document.querySelector("#confirmPassword-error").style.display = "none";
+		document.querySelector("#confirmPassword").classList.remove("is-invalid");
+		validConfirmPassword = true;
 	}
 }
 

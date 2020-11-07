@@ -70,17 +70,10 @@
 				<label for="method" class="sr-only">Payment Method</label>
 				<input type="text" class="form-control" id="method" placeholder="Payment Method" name="method">
 			</div>
-			<div class="form-group row" style="margin-bottom: 0;">
-				<div class="col-12 col-md-6">
-					<label for="date">Date</label>
-					<input type="date" class="form-control" id="date" name="date">
-				</div>
-				<div class="col-12 col-md-6">
-					<label for="time">Time</label>
-					<input type="time" class="form-control" id="time" name="time">
-				</div>
+			<div class="form-group">
+				<label for="time">Time</label>
+				<input type="datetime-local" class="form-control" id="time" name="time">
 			</div>
-			<div style="margin-bottom: 7px; margin-left: 6px;"><small class="text-muted">Leave time black if you don't remember the time.</small></div>
 			<div class="form-group row" style="margin-bottom: 7px;">
 				<div class="col">
 					<label for="category">Category</label>
@@ -113,8 +106,7 @@
 				<div class="col-4 col-md-2">
 					<label for="currency">Currency</label>
 					<select name="currency" id="currency" class="form-control">
-						<option value="USD" selected>USD $</option>
-						<option value="CNY">CNY &yen</option>
+						<option value="USD" selected disabled="">$</option>
 					</select>
 				</div>
 				<div class="col-8 col-md-10">

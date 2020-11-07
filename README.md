@@ -6,10 +6,13 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.1.1
-- Added fields `firstName`, `lastName` to `User`.
+Backend: v0.2.0a1
+- Added login control and security to website. 
+  Redirects unauthorized users to login page.
+  Supports persistent login by saving local session Cookies and browser sessions. 
+  User login state will be remembered until logout.
 
-Front-end: df74d63
+Front-end: 1f3eeba
 
 #### General Instructions
 1. Import MySQL database from `showtime.sql` file.

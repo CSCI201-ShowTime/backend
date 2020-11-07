@@ -1,20 +1,17 @@
-var checkRequirement = function(formLogin) {
+var loginSever = function() {
     $.ajax({
-        type: "GET",
-        url: "http://localhost:8080/api/auth",
-        dataType: "json",
+        type: "POST",
+        url: "/api/auth/login",
+        contentType: "application/x-www-form-urlencoded",
         data: {
             email : $('#email').val(),
-            password : $('#inputPassword5').val()
+            password : $('#password').val()
         },
         success: function(data, textStatus, jqXHR) {
-            console.log(data);
-            return false;
+            location.href = "/timeline"
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR.status);
-            return false;
+            alert(jqXHR.status + " ERROR");
         }
     });
-    return false;
 }

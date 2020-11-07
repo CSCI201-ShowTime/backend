@@ -56,7 +56,11 @@ body.rainy {
         width: 100%;
     }
 
-    #reroro {
+    .weather p {
+        width: 30%;
+    }
+
+    #reroro, #hohoho {
         font-size: 50%;
     }
 
