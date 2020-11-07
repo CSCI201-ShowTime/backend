@@ -29,37 +29,41 @@ public class UserDeserializerService extends JsonDeserializer<User> {
         User user = new User();
 
         // email, required, not null
-        String email = node.get("email").asText();
-        if(!pattern.matcher(email).find()) {
-            throw new JsonProcessingException(email + " is not a valid email.") { };
+        JsonNode email = node.get("email");
+        String emailStr;
+        if(email == null || !pattern.matcher(emailStr = email.asText()).find()) {
+            throw new JsonProcessingException(email + " is not a valid email") { };
         }
-        user.setEmail(email);
+        user.setEmail(emailStr);
 
         // username, not null, default to email if field not included or empty
         JsonNode username = node.get("username");
-        String usernameStr = username == null || username.asText().equals("") ? email : username.asText();
+        String usernameStr = username == null || username.asText().equals("") ? emailStr : username.asText();
         user.setUsername(usernameStr);
 
         // password, required, not null, only tests if less than 8 characters
-        String password = node.get("password").asText();
-        if(password.trim().length() < 8) {
-            throw new JsonProcessingException(password + " is not a valid password.") { };
+        JsonNode password = node.get("password");
+        String passwordStr;
+        if(password == null || (passwordStr = password.asText()).trim().length() < 8) {
+            throw new JsonProcessingException(password + " is not a valid password") { };
         }
-        user.setPassword(password);
+        user.setPassword(passwordStr);
 
         // fname, required, not null
-        String fname = node.get("fname").asText();
-        if(fname.trim().length() == 0) {
-            throw new JsonProcessingException(fname + " is not a valid first name.") { };
+        JsonNode fname = node.get("fname");
+        String fnameStr;
+        if(fname == null || (fnameStr = fname.asText().trim()).length() == 0) {
+            throw new JsonProcessingException(fname + " is not a valid first name") { };
         }
-        user.setFname(fname);
+        user.setFname(fnameStr);
 
         // lname, required, not null
-        String lname = node.get("lname").asText();
-        if(lname.trim().length() == 0) {
-            throw new JsonProcessingException(lname + " is not a valid last name.") { };
+        JsonNode lname = node.get("lname");
+        String lnameStr;
+        if(lname == null || (lnameStr = lname.asText().trim()).length() == 0) {
+            throw new JsonProcessingException(lname + " is not a valid last name") { };
         }
-        user.setLname(lname);
+        user.setLname(lnameStr);
 
         // latitude, not null, default to 91
         JsonNode lat = node.get("latitude");

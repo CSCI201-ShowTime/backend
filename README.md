@@ -6,11 +6,9 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.2.0a2
-- Added login control and security to website. 
-  Redirects unauthorized users to login page.
-  Supports persistent login by saving local session Cookies and browser sessions. 
-  User login state will be remembered until logout.
+Backend: v0.2.1
+- Full exception handling in `\user\POST`.
+- Logger support in `\user\POST`.
 
 Front-end: 1f3eeba
 
@@ -29,3 +27,6 @@ For detailed instructions, check instructions for Demo on
 #### Version Specific Instructions
 `login.html`
 - Included `login-server.js`.
+
+`register.html`
+- Modified `register.js` `AJAX` call. To do: separate `register.js` into `register-server.js`. 
