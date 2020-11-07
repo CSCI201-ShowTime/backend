@@ -1,0 +1,23 @@
+/* CSS style for event_detail.html */
+.wrapper {
+	margin-top: 30px;
+	margin-bottom: 30px;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #ebf4fa;
+	padding: 30px;
+}
+
+.sm-link {
+	display: none;
+}
+
+@media (max-width: 767px) {
+	.lg-link {
+		display: none;
+	}
+	.sm-link {
+		display: block;
+	}
+}

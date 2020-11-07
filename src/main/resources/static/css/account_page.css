@@ -1,0 +1,63 @@
+/* CSS style for accout_page.css */
+.avatar {
+	margin: auto;
+	border: 5px solid white;
+	padding: 10px;
+	vertical-align: middle;
+	width: 200px;
+	height: 200px;
+	border-radius: 50%;
+}
+.img-container-block {
+	width:20px;
+	height:20px;
+	text-align: center;
+}
+.center-align{
+	margin: auto;
+	padding: auto;
+	text-align: center;
+	z-index: -100;
+}
+
+.title h1{
+	margin: 10px;
+	text-align: center;
+	font-family: "Bitter", "monospace";
+}
+
+
+.wrapper {
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.group-block {
+	margin: 5px;
+}
+
+.card-wrapper {
+	width: 90%;
+	margin: auto;
+	padding: 5px;
+}
+
+.group-block:hover {
+	background-color: lightgray;
+}
+
+.card-wrapper a {
+	width: 25%;
+	color: black;
+}
+
+.card-wrapper a:hover {
+	text-decoration: none;
+}
+
+@media (max-width: 767px) {
+	.wrapper {
+		width: 90%;
+	}
+}

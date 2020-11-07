@@ -33,6 +33,14 @@ public class User {
     private String password;
 
     @NotNull
+    @Column(name = "firstName", nullable = false, unique = true)
+    private String firstName;
+
+    @NotNull
+    @Column(name = "lastName", nullable = false, unique = true)
+    private String lastName;
+
+    @NotNull
     @Column(name = "latitude", nullable = false, unique = true)
     private double latitude;
 
@@ -70,6 +78,22 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public double getLatitude() {

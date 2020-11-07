@@ -19,10 +19,11 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    //PRG
+
     @GetMapping("/auth")
     public ResponseEntity<User> givenEmailVerifyPswd(@RequestParam String email, @RequestParam String password) {
         Optional<User> userOpt = userRepository.findUserByEmail(email);
-        // lol, who can read this?
         if(userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
             return new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
         }
