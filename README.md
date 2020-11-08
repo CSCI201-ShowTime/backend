@@ -6,10 +6,10 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.2.6
-- Added password hashing. Fixed password hashing bug.
+Backend: v0.3.0
+- Removed password hashing temporarily. Unable to fix error.
 
-Front-end: 1f3eeba
+Front-end: 778736c
 
 #### General Instructions
 1. Import MySQL database from `showtime.sql` file.
@@ -25,14 +25,13 @@ For detailed instructions, check instructions for Demo on
 
 #### Version Specific Instructions
 `login.html`
-- Included `login-server.js`.
-- Included password hashing js.
+- Integrated `login-server.js` in `login.js`. 
+  May separate at later date to decouple front-end and backend.
+- Updated `AJAX` call in js.
 
 `register.html`
-- Fixed `register.js` `AJAX` call to server.
-  To do: separate `register.js` into `register-server.js`.  
-- Included password hashing js.
+- Updated `AJAX` call in js. May separate.
 
 `account_page.html`
 - Included `logout-server.js` and `logout-navbar-temp.js`.
-  `logout-navbar-temp.js` should be integrated by front-end team as fit.
+  `logout-navbar-temp.js` should be integrated by front-end as fit.

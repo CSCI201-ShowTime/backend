@@ -1,8 +1,9 @@
 //const apiKey = '001b0f58045147663b1ea518d34d88b4';
 const apiKey = '5f9aaccc5debb683b09516f40cefa44e';
 
-function weatherCallback(cityID){
-    fetch('https://api.openweathermap.org/data/2.5/weather?id=' + cityID+ '&appid=' + apiKey)
+function weatherCallback(latitude, longitude){
+    //fetch('https://api.openweathermap.org/data/2.5/weather?id=' + cityID+ '&appid=' + apiKey)
+    fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + latitude+ '&lon=' + longitude + '&appid=' + apiKey)
     .then(function(resp){
       return resp.json() //convert data to json
     })
@@ -47,6 +48,7 @@ function drawWeather( d ) {
   }
 }
 window.onload = function() {
-    weatherCallback( 5368361 );
+  weatherCallback(34, -118);
+    //weatherCallback( 5368361 );
   	//weatherCallback( 6167865 );
 }

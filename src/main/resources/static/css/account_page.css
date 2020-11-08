@@ -1,4 +1,10 @@
 /* CSS style for accout_page.css */
+#change_profile{
+	display: none;
+}
+#change_password{
+	display: none;
+}
 .avatar {
 	margin: auto;
 	border: 5px solid white;
@@ -35,6 +41,7 @@
 
 .group-block {
 	margin: 5px;
+	background-color: white;
 }
 
 .card-wrapper {

@@ -57,6 +57,7 @@
 			<div class="form-group">
 				<label for="title" class="sr-only">Title</label>
 				<input type="text" class="form-control" id="title" placeholder="These fields will be changed to details of events later using PHP." name="title"  style="height: 60px; font-size: 150%; font-weight: bold;">
+				<small class="error">Title cannot be empty!</small>
 			</div>
 			<hr>
 			<div class="form-group">
@@ -64,23 +65,25 @@
 				<input type="text" class="form-control" id="location" placeholder="Location" name="location">
 			</div>
 			<div class="form-group row">
-				<div class="col-12 col-md-6">
+				<div class="col-12 col-md-6 startTime-div">
 					<label for="startTime">Starts</label>
 					<input type="datetime-local" class="form-control" id="startTime" name="startTime">
+					<small class="error">Invalid Date!</small>
 				</div>
-				<div class="col-12 col-md-6">
+				<div class="col-12 col-md-6 finishTime-div">
 					<label for="finishTime">Ends</label>
 					<input type="datetime-local" class="form-control" id="finishTime" name="finishTime">
+					<small class="error">Invalid Date!</small>
 				</div>
 			</div>
 			<div class="form-group form-check allday-checkbox">
-				<input type="checkbox" class="form-check-input" id="check" name="check">
-				<label class="form-check-label text-muted" for="check">All Day</label>
+				<input type="checkbox" class="form-check-input" id="allday" name="allday">
+				<label class="form-check-label text-muted" for="allday">All Day</label>
 			</div>
 			<div class="form-group row">
 				<div class="col">
-					<label for="priority">Repeat</label>
-					<select name="priority" id="priority-id" class="form-control">
+					<label for="repeat">Repeat</label>
+					<select name="repeat" id="repeat" class="form-control">
 						<option value="0" selected>Never</option>
 						<option value="1">Every Day</option>
 						<option value="2">Every Week</option>
@@ -92,22 +95,20 @@
 				<div class="col">
 					<label for="notification">Notification Time</label>
 					<input type="datetime-local" class="form-control" id="notification" name="notification">
+					<small class="error">Invalid Date!</small>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group invitee-div">
 				<label for="invitee">Invitee's Email</label>
 				<input type="email" class="form-control" id="invitee" name="invitee">
 			</div>
 			<div class="form-group form-check private-checkbox">
 				<input type="checkbox" class="form-check-input" id="private" name="private">
 				<label class="form-check-label" for="private">Private</label>
-				<small class="text-muted lg-link" style="text-align: right; padding-left: 10px;">By checking private, invitees will only see the title of the event.</small>
 			</div>
-			<div><small class="text-muted sm-link" style="font-size: 50%; margin-top: -15px; margin-bottom: 15px; margin-left: 10px;">Invitees will only see the title of the private event.</small></div>
-
 			<div class="form-group">
-				<label for="content" class="sr-only">Notes</label>
-				<textarea class="form-control" id="content" rows="3" placeholder="Notes"></textarea>
+				<label for="notes" class="sr-only">Notes</label>
+				<textarea class="form-control" id="notes" rows="3" placeholder="Notes"></textarea>
 			</div>
 
 			<button type="submit" class="btn btn-info btn-lg btn-block">Save</button>

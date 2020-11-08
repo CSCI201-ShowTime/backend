@@ -36,11 +36,6 @@
 	}
 }
 
-.error {
-	display: none;
-	color: red;
-	font-style: italic;
-}
 
 #password-note {
 	margin-top: 10px;

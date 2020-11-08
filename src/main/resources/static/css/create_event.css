@@ -27,16 +27,3 @@
 	background-color: #ebf4fa;
 	padding: 30px;
 }
-
-.sm-link {
-	display: none;
-}
-
-@media (max-width: 767px) {
-	.lg-link {
-		display: none;
-	}
-	.sm-link {
-		display: block;
-	}
-}

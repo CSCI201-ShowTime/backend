@@ -13,6 +13,21 @@ public class IndexController {
         return "home.html";
     }
 
+/*    @RequestMapping("/login")
+    public String login() {
+        return "login.html";
+    }
+
+    @RequestMapping("/register")
+    public String register() {
+        return "register.html";
+    }
+
+    @RequestMapping("/timeline")
+    public String timeline() {
+        return "timeline.html";
+    }*/
+
     @RequestMapping("{path:^.*(?<!\\.html)$}")
     public String webpage(@PathVariable String path) {
         return path + ".html";

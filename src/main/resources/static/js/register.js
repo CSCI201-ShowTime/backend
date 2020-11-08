@@ -10,25 +10,31 @@ document.querySelector("form").onsubmit = function(event) {
 		let password = $("#password").val();
 		let fname = $("#fname").val();
 		let lname = $("#lname").val();
-		
-		let encoded = CryptoJS.MD5(password + "ShoWTimE").toString();
-		// alert(encoded);
-		
+
+		// B (v0.2.6): disables encryption, causes unknown error, unable to fix atm
+		// Li (v0.2.6): encodes password before sending to server 
+		//let encoded = CryptoJS.MD5(password + "ShoWTimE").toString();
+
+		// B (v0.2.6): updated AJAX request
+		// B todo: move login AJAX to separate file?
+		// test AJAX chaining using .done() for better fluency?
 		$.ajax({
 			method: "POST",
 			url: "/api/user",
+			// Fixed: contentType must be explicitly defined if submitted as a form
+			// form auto-submits as "application/x-www-form-urlencoded"
 			contentType: "application/json",
+			// Fixed: for JSON, data must be explicitly parsed
 			data: JSON.stringify({
 				username: email,
 	    		email: email,
 	    		fname: fname,
-	    		lname: lname,
-	    		password: encoded
+				lname: lname,
+	    		password: password
 			})
 		})
-		.done(function(results) {
-			
-
+		.done(function( data, textStatus, jqXHR ) {
+			// B todo: login and redirect to timeline
 		})
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 			if (jqXHR.status == 409) {
