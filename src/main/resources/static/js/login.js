@@ -12,11 +12,7 @@ document.querySelector("form").onsubmit = function(event) {
 		document.querySelector(".error").innerHTML = "";
 		document.querySelector(".error").style.display = "none";
 	}
-	
-	var encoded = CryptoJS.MD5(encoded + "ShoWTimE");
-	alert(encoded);
-	document.querySelector("#password").value = encoded;
-	
+
 	// server-side handling
 	loginSever();
 }
