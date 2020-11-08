@@ -65,17 +65,17 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseEntity<?> retrieveUserByEmail(@RequestParam String email, Principal principal) {
-        // locate session user from Principal, safe type casting
+        // locate session user from Principal, suggested way in Spring Security topical guide
         Authentication authentication = (Authentication) principal;
         // no session information, perhaps no Cookie information?
         if(authentication == null) {
-            return new ResponseEntity<>("Unauthorized access of non-login user.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Unauthorized access from non-login user.", HttpStatus.UNAUTHORIZED);
         }
         org.springframework.security.core.userdetails.User authorizedUser =
                 (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
         // accessing user is not session user
         if(!authorizedUser.getUsername().equals(email)) {
-            return new ResponseEntity<>("Unauthorized access of other user.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Unauthorized access to other-than-login user.", HttpStatus.UNAUTHORIZED);
         }
         Optional<User> userOpt = userRepo.findUserByEmail(email);
         if(userOpt.isPresent()) {

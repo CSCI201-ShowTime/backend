@@ -46,7 +46,8 @@ public class SessionWebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // logout page, call to "/auth/logout"
                 .logout()
-                    .logoutUrl("/api/auth/logout");
+                    .logoutUrl("/api/auth/logout")
+                    .logoutSuccessUrl("/");
     }
 
     @Override

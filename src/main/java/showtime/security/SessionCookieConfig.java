@@ -1,3 +1,4 @@
+/*
 package showtime.security;
 
 import org.springframework.context.annotation.Bean;
@@ -11,9 +12,10 @@ public class SessionCookieConfig {
     @Bean
     public CookieSerializer cookieSerializer() {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-        serializer.setCookieName("SHOWTIME_SESSIONID");
+        serializer.setCookieName("JSESSIONID");
         serializer.setCookiePath("/");
         serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$");
         return serializer;
     }
 }
+*/
