@@ -10,6 +10,10 @@ document.querySelector("form").onsubmit = function(event) {
 		let password = $("#password").val();
 		let fname = $("#fname").val();
 		let lname = $("#lname").val();
+		
+		let encoded = CryptoJS.MD5(password + "ShoWTimE").toString();
+		// alert(encoded);
+		
 		$.ajax({
 			method: "POST",
 			url: "/api/user",
@@ -19,7 +23,7 @@ document.querySelector("form").onsubmit = function(event) {
 	    		email: email,
 	    		fname: fname,
 	    		lname: lname,
-	    		password: password
+	    		password: encoded
 			})
 		})
 		.done(function(results) {
