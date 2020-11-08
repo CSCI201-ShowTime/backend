@@ -11,7 +11,7 @@ var loginSever = function() {
             location.href = "/timeline"
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status + " ERROR");
+            console.log(jqXHR.status + " ERROR");
         }
     });
 }

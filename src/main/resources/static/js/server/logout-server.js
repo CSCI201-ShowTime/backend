@@ -6,7 +6,7 @@ var logoutServer = function() {
             location.href = "/"
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status + " ERROR");
+            console.log(jqXHR.status + " ERROR");
         }
     });
 }

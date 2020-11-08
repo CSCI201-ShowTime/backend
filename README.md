@@ -7,7 +7,7 @@ a change log will be attached to the bottom of this list.
 
 #### Version
 Backend: v0.2.6
-- Mapped controllers for all `/webpage` in root folder to `/webpage.html`.
+- Added password hashing. Fixed password hashing bug.
 
 Front-end: 1f3eeba
 
@@ -26,10 +26,12 @@ For detailed instructions, check instructions for Demo on
 #### Version Specific Instructions
 `login.html`
 - Included `login-server.js`.
+- Included password hashing js.
 
 `register.html`
 - Fixed `register.js` `AJAX` call to server.
   To do: separate `register.js` into `register-server.js`.  
+- Included password hashing js.
 
 `account_page.html`
 - Included `logout-server.js` and `logout-navbar-temp.js`.
