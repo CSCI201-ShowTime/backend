@@ -6,8 +6,8 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.2.6
-- Mapped all `/webpage` in root folder to `/webpage.html`.
+Backend: v0.2.3
+- Added logout support to `account_page.html` only.
 
 Front-end: 1f3eeba
 

@@ -25,7 +25,7 @@ public class SessionWebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // restricts access to all but the following pages
                 .authorizeRequests()
-                    .antMatchers("/", "/home", "/home.html").permitAll()
+                    .antMatchers("/", "/home.html").permitAll()
                     .antMatchers("/login", "/login.html").permitAll()
                     .antMatchers("/register", "/register.html").permitAll()
                     .antMatchers("/css/**").permitAll()
