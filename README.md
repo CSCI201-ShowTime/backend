@@ -6,9 +6,8 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.2.2a1
-- Added `/user/GET` and associated security features. 
-  Only able to retrieve information of currently logged in user.
+Backend: v0.2.3
+- Added logout support to `account_page.html` only.
 
 Front-end: 1f3eeba
 
@@ -29,4 +28,9 @@ For detailed instructions, check instructions for Demo on
 - Included `login-server.js`.
 
 `register.html`
-- Modified `register.js` `AJAX` call. To do: separate `register.js` into `register-server.js`. 
+- Fixed `register.js` `AJAX` call to server.
+  To do: separate `register.js` into `register-server.js`.  
+
+`account_page.html`
+- Included `logout-server.js` and `logout-navbar-temp.js`.
+  `logout-navbar-temp.js` should be integrated by front-end team as fit.
