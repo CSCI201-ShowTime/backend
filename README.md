@@ -6,9 +6,9 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.2.1
-- Full exception handling in `\user\POST`.
-- Logger support in `\user\POST`.
+Backend: v0.2.2a1
+- Added `/user/GET` and associated security features. 
+  Only able to retrieve information of currently logged in user.
 
 Front-end: 1f3eeba
 
