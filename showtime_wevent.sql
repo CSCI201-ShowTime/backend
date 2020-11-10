@@ -28,7 +28,7 @@ CREATE TABLE `budget` (
   `eventid` int NOT NULL,
   `amount` decimal(11,3) NOT NULL,
   `category` varchar(20) DEFAULT NULL,
-  `userid` int DEFAULT NULL,
+  `ebud_transaction_userid` int DEFAULT NULL,
   PRIMARY KEY (`eventid`),
   UNIQUE KEY `eventid_UNIQUE` (`eventid`),
   CONSTRAINT `fk_budget_eventid` FOREIGN KEY (`eventid`) REFERENCES `event` (`eventid`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -251,4 +251,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-10  3:38:55
+-- Dump completed on 2020-11-11  3:49:53

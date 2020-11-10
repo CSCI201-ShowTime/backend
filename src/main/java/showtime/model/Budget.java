@@ -24,8 +24,10 @@ public class Budget extends Event {
     @Column(name = "category")
     private String category;
 
-    @Column(name = "userid")
-    private int userid;
+    // may be NULL
+    // TODO: change primitives to Boxed
+    @Column(name = "ebud_transaction_userid")
+    private Integer ebudTransactionUserid;
 
     public Budget() {
     }
@@ -36,7 +38,7 @@ public class Budget extends Event {
                 "eventid=" + eventid +
                 ", amount=" + amount +
                 ", category='" + category + '\'' +
-                ", userid=" + userid +
+                ", userid=" + ebudTransactionUserid +
                 '}';
     }
 
@@ -66,13 +68,11 @@ public class Budget extends Event {
         this.category = category;
     }
 
-    @Override
-    public int getUserid() {
-        return userid;
+    public Integer getEbudTransactionUserid() {
+        return ebudTransactionUserid;
     }
 
-    @Override
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setEbudTransactionUserid(Integer userid) {
+        this.ebudTransactionUserid = userid;
     }
 }

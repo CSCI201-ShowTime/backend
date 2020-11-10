@@ -6,8 +6,9 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.4.0a1
-- Added `Event/GET` support. Requires more testing.
+Backend: v0.4.0a3
+- Fixed issue where tables using primitives contain NULL.
+  Changed primitives to Boxed.
 
 Front-end: 778736c
 

@@ -941,7 +941,7 @@ SELECT|sys.sys_config:null
       <Position>3</Position>
       <DataType>varchar(20)|0s</DataType>
     </column>
-    <column id="299" parent="288" name="userid">
+    <column id="299" parent="288" name="ebud_transaction_userid">
       <Position>4</Position>
       <DataType>int|0s</DataType>
     </column>
