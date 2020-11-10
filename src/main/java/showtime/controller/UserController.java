@@ -88,7 +88,7 @@ public class UserController {
      *         {@code 401 UNAUTHORIZED} if missing credentials or credentials mismatch
      */
     @GetMapping("/user")
-    public ResponseEntity<?> retrieveUserByEmail(@RequestParam String email, Principal principal) {
+    public ResponseEntity<?> getUserByEmail(@RequestParam String email, Principal principal) {
         // locate current user from Principal
         // as suggested in Spring Security topical guide
         Authentication authentication = (Authentication) principal;
