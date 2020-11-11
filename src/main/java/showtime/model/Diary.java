@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "diary")
@@ -17,14 +18,20 @@ public class Diary extends Event {
     @NotNull
     private int eventid;
 
+    public Diary(@NotNull int userid, @NotNull Timestamp start, Timestamp end,
+                 @NotNull String title, String description, @NotNull int visibility,
+                 @NotNull int type, String location) {
+        super(userid, start, end, title, description, visibility, type, location);
+    }
+
     public Diary() {
     }
 
     @Override
     public String toString() {
-        return "Basic{" +
+        return "Diary{" +
                 "eventid=" + eventid +
-                '}';
+                "} " + super.toString();
     }
 
     @Override

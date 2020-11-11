@@ -125,7 +125,7 @@ CREATE TABLE `event` (
 
 LOCK TABLES `event` WRITE;
 /*!40000 ALTER TABLE `event` DISABLE KEYS */;
-INSERT INTO `event` VALUES (1,5,'2020-10-01 10:00:00',NULL,'','redkeopp teach 104',0,1,NULL),(2,5,'2020-10-15 12:00:00',NULL,'','redekopp buy gtx3090',0,2,NULL),(3,6,'2020-10-12 12:00:00',NULL,'','cote owe kempe coffee',0,2,NULL),(4,1,'2020-10-20 20:00:00',NULL,'','goodknee drop 109',0,1,NULL),(5,5,'2020-10-29 14:00:00',NULL,'','redekopp teach 109',0,1,NULL);
+INSERT INTO `event` VALUES (1,5,'2020-10-01 10:00:00',NULL,'','redkeopp teach 104',0,3,NULL),(2,5,'2020-10-15 12:00:00',NULL,'','redekopp buy gtx3090',0,4,NULL),(3,6,'2020-10-12 12:00:00',NULL,'','cote owe kempe coffee',0,4,NULL),(4,1,'2020-10-20 20:00:00',NULL,'','goodknee drop 109',0,3,NULL),(5,5,'2020-10-29 14:00:00',NULL,'','redekopp teach 109',0,3,NULL);
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,4 +251,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-11  3:49:53
+-- Dump completed on 2020-11-12  1:44:46

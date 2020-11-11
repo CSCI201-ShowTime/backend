@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,5 +42,11 @@ public class EventController {
         logger.debug(params.toString());
         List<Event> eventO = eventRepo.findAll(new EventSpecification(params));
         return new ResponseEntity<>(eventO, HttpStatus.OK);
+    }
+
+    @PostMapping("event/rawevent")
+    public ResponseEntity<Event> createNewEvent(@RequestBody Event event) {
+        Event newEvent = eventRepo.save(event);
+        return new ResponseEntity<>(newEvent, HttpStatus.CREATED);
     }
 }

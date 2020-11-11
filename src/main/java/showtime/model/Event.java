@@ -51,7 +51,35 @@ public class Event {
     @Column(name = "location")
     private String location;
 
+    public Event(@NotNull int userid, @NotNull Timestamp start, Timestamp end,
+                 @NotNull String title, String description, @NotNull int visibility,
+                 @NotNull int type, String location) {
+        this.userid = userid;
+        this.start = start;
+        this.end = end;
+        this.title = title;
+        this.description = description;
+        this.visibility = visibility;
+        this.type = type;
+        this.location = location;
+    }
+
     public Event() {
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "eventid=" + eventid +
+                ", userid=" + userid +
+                ", start=" + start +
+                ", end=" + end +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", visibility=" + visibility +
+                ", type=" + type +
+                ", location='" + location + '\'' +
+                '}';
     }
 
     public int getEventid() {

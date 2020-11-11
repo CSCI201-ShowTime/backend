@@ -30,6 +30,40 @@ public class UserController {
     private UserRepository userRepo;
 
     /**
+     * Responds to "api/user.GET" requests. Retrieves user information from the database
+     * when Cookies can be used to authenticate that the current user matches the user
+     * whose information is being retrieved.
+     *
+     * @param email email of user whose information is being retrieved
+     * @param principal principal of the current user
+     * @return {@code 200 OK} if credentials match <br>
+     *         {@code 401 UNAUTHORIZED} if missing credentials or credentials mismatch
+     */
+    @GetMapping("/user")
+    public ResponseEntity<?> getUserByEmail(@RequestParam String email, Principal principal) {
+        // locate current user from Principal
+        // as suggested in Spring Security topical guide
+        Authentication authentication = (Authentication) principal;
+        // no credentials, perhaps missing Cookie?
+        if(authentication == null) {
+            return new ResponseEntity<>("Unauthorized access from non-login user.", HttpStatus.UNAUTHORIZED);
+        }
+        org.springframework.security.core.userdetails.User authorizedUser =
+                (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+        // mismatch credentials, requested user is not current user
+        if(!authorizedUser.getUsername().equals(email)) {
+            return new ResponseEntity<>("Unauthorized access to other-than-login user.", HttpStatus.UNAUTHORIZED);
+        }
+        Optional<User> userOpt = userRepo.findUserByEmail(email);
+        if(userOpt.isPresent()) {
+            return new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
      * Responds to "/api/user.POST" requests. Registers a new user in the database.
      *
      * @param user user in {@code JSON} format
@@ -75,39 +109,5 @@ public class UserController {
     public ResponseEntity<?> handleJsonProcessingException(JsonProcessingException jpe) {
         logger.debug(jpe.getMessage() + " 400 BAD REQUEST");
         return new ResponseEntity<>(jpe.getMessage() + " at \"/user.POST\".", HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * Responds to "api/user.GET" requests. Retrieves user information from the database
-     * when Cookies can be used to authenticate that the current user matches the user
-     * whose information is being retrieved.
-     *
-     * @param email email of user whose information is being retrieved
-     * @param principal principal of the current user
-     * @return {@code 200 OK} if credentials match <br>
-     *         {@code 401 UNAUTHORIZED} if missing credentials or credentials mismatch
-     */
-    @GetMapping("/user")
-    public ResponseEntity<?> getUserByEmail(@RequestParam String email, Principal principal) {
-        // locate current user from Principal
-        // as suggested in Spring Security topical guide
-        Authentication authentication = (Authentication) principal;
-        // no credentials, perhaps missing Cookie?
-        if(authentication == null) {
-            return new ResponseEntity<>("Unauthorized access from non-login user.", HttpStatus.UNAUTHORIZED);
-        }
-        org.springframework.security.core.userdetails.User authorizedUser =
-                (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
-        // mismatch credentials, requested user is not current user
-        if(!authorizedUser.getUsername().equals(email)) {
-            return new ResponseEntity<>("Unauthorized access to other-than-login user.", HttpStatus.UNAUTHORIZED);
-        }
-        Optional<User> userOpt = userRepo.findUserByEmail(email);
-        if(userOpt.isPresent()) {
-            return new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 }

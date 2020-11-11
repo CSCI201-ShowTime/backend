@@ -6,9 +6,8 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.4.0a3
-- Fixed issue where tables using primitives contain NULL.
-  Changed primitives to Boxed.
+Backend: v0.4.1
+- Added `EVENT/POST`. Ongoing testing. Major change to entity class planned for next update.
 
 Front-end: 778736c
 

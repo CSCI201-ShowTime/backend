@@ -6,4 +6,5 @@ import showtime.model.Event;
 import showtime.model.User;
 
 public interface EventRepository extends JpaRepository<Event, Integer>, JpaSpecificationExecutor<Event> {
+
 }
