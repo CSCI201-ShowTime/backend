@@ -7,20 +7,16 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "diary")
 @PrimaryKeyJoinColumn(name = "eventid")
 public class Diary extends Event {
 
-    @Id
-    @Column(name = "eventid", nullable = false, unique = true)
-    @NotNull
-    private int eventid;
-
-    public Diary(@NotNull int userid, @NotNull Timestamp start, Timestamp end,
-                 @NotNull String title, String description, @NotNull int visibility,
-                 @NotNull int type, String location) {
+    public Diary(@NotNull int userid, @NotNull LocalDateTime start, LocalDateTime end,
+                 @NotNull String title, String description,
+                 @NotNull int visibility, @NotNull int type, String location) {
         super(userid, start, end, title, description, visibility, type, location);
     }
 
@@ -29,18 +25,6 @@ public class Diary extends Event {
 
     @Override
     public String toString() {
-        return "Diary{" +
-                "eventid=" + eventid +
-                "} " + super.toString();
-    }
-
-    @Override
-    public int getEventid() {
-        return eventid;
-    }
-
-    @Override
-    public void setEventid(int eventid) {
-        this.eventid = eventid;
+        return "Diary{} " + super.toString();
     }
 }

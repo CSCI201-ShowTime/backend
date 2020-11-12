@@ -10,6 +10,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "event")
@@ -28,10 +29,10 @@ public class Event {
 
     @Column(name = "start", nullable = false)
     @NotNull
-    private Timestamp start;
+    private LocalDateTime start;
 
     @Column(name = "end")
-    private Timestamp end;
+    private LocalDateTime end;
 
     @Column(name = "title", nullable = false)
     @NotNull
@@ -51,9 +52,9 @@ public class Event {
     @Column(name = "location")
     private String location;
 
-    public Event(@NotNull int userid, @NotNull Timestamp start, Timestamp end,
-                 @NotNull String title, String description, @NotNull int visibility,
-                 @NotNull int type, String location) {
+    public Event(@NotNull int userid, @NotNull LocalDateTime start, LocalDateTime end,
+                 @NotNull String title, String description,
+                 @NotNull int visibility, @NotNull int type, String location) {
         this.userid = userid;
         this.start = start;
         this.end = end;
@@ -98,19 +99,19 @@ public class Event {
         this.userid = userid;
     }
 
-    public Timestamp getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public void setStart(Timestamp start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public Timestamp getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(Timestamp end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 

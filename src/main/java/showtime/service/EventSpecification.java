@@ -4,17 +4,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.MultiValueMap;
-import showtime.controller.EventController;
 import showtime.model.Event;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Generates a {@code Specification<Event>} using the given values
+ * in a {@code MultiValueMap}.
+ */
+@Deprecated(since = "v0.4.1")
 public class EventSpecification implements Specification<Event> {
 
     Logger logger = LoggerFactory.getLogger(EventSpecification.class);
@@ -43,7 +47,7 @@ public class EventSpecification implements Specification<Event> {
             preds.add( criteriaBuilder.equal(root.get("userid"), userid.get(0)) );
         }
 
-        List<Timestamp> start = MVPUtil.parseTimeStampNoexcept( params.get("start") );
+        List<LocalDateTime> start = MVPUtil.parseDateTimeNoexcept( params.get("start") );
         logger.debug(start.toString());
         if(start.size() >= 2) {
             preds.add( criteriaBuilder.between(root.get("start"), start.get(0), start.get(1)) );
@@ -52,7 +56,7 @@ public class EventSpecification implements Specification<Event> {
             preds.add( criteriaBuilder.equal(root.get("start"), start.get(0)) );
         }
 
-        List<Timestamp> end = MVPUtil.parseTimeStampNoexcept( params.get("end") );
+        List<LocalDateTime> end = MVPUtil.parseDateTimeNoexcept( params.get("end") );
         logger.debug(end.toString());
         if(end.size() >= 2) {
             preds.add( criteriaBuilder.between(root.get("end"), end.get(0), end.get(1)) );
@@ -81,19 +85,19 @@ public class EventSpecification implements Specification<Event> {
 
         List<Integer> type = MVPUtil.parseIntNoexcept( params.get("type") );
         logger.debug(type.toString());
+        // if == 0, will add cb.or(), which is false, to preds. x and false is false.
         if(type.size() > 0) {
-            preds.add( criteriaBuilder.equal(root.get("type"), type.get(0)) );
+            List<Predicate> typeAnyMatchPreds = new ArrayList<>();
+            for(Integer each : type) {
+                typeAnyMatchPreds.add( criteriaBuilder.equal(root.get("type"), each) );
+            }
+            preds.add( criteriaBuilder.or(typeAnyMatchPreds.toArray(new Predicate[0])) );
         }
 
         List<String> location = MVPUtil.toStringNoexcept( params.get("location") );
         logger.debug(location.toString());
-        // if == 0, will add cb.or(), which is false, to preds. x and false is false.
-        if(type.size() > 0) {
-            List<Predicate> locationAnyMatchPreds = new ArrayList<>();
-            for(String each : location) {
-                locationAnyMatchPreds.add( criteriaBuilder.equal(root.get("location"), each) );
-            }
-            preds.add( criteriaBuilder.or(locationAnyMatchPreds.toArray(new Predicate[0])) );
+        if(location.size() > 0) {
+            preds.add( criteriaBuilder.like(root.get("location"), location.get(0)) );
         }
 
         logger.debug(preds.toString());

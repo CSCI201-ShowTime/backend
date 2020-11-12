@@ -6,16 +6,13 @@ import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "budget")
 @PrimaryKeyJoinColumn(name = "eventid")
 public class Budget extends Event {
-
-    @Id
-    @Column(name = "eventid", nullable = false, unique = true)
-    @NotNull
-    private int eventid;
 
     @Column(name = "amount", nullable = false, columnDefinition="Decimal(11,3)")
     @NotNull
@@ -29,27 +26,26 @@ public class Budget extends Event {
     @Column(name = "ebud_transaction_userid")
     private Integer ebudTransactionUserid;
 
+    public Budget(@NotNull int userid, @NotNull LocalDateTime start, LocalDateTime end,
+                  @NotNull String title, String description,
+                  @NotNull int visibility, @NotNull int type, String location,
+                  @NotNull double amount, String category, Integer ebudTransactionUserid) {
+        super(userid, start, end, title, description, visibility, type, location);
+        this.amount = amount;
+        this.category = category;
+        this.ebudTransactionUserid = ebudTransactionUserid;
+    }
+
     public Budget() {
     }
 
     @Override
     public String toString() {
         return "Budget{" +
-                "eventid=" + eventid +
-                ", amount=" + amount +
+                "amount=" + amount +
                 ", category='" + category + '\'' +
-                ", userid=" + ebudTransactionUserid +
-                '}';
-    }
-
-    @Override
-    public int getEventid() {
-        return eventid;
-    }
-
-    @Override
-    public void setEventid(int eventid) {
-        this.eventid = eventid;
+                ", ebudTransactionUserid=" + ebudTransactionUserid +
+                "} " + super.toString();
     }
 
     public double getAmount() {

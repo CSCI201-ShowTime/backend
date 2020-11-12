@@ -1,17 +1,12 @@
 package showtime.repository;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
-import showtime.model.Budget;
 import showtime.model.Diary;
 
-import java.sql.Timestamp;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,30 +17,33 @@ class EventRepositoryPolymorphicSaveTest {
     @Autowired
     private EventRepository eventRepo;
     @Autowired
+    private DurationEventRepository durationEventRepo;
+    @Autowired
+    private ReminderRepository reminderRepo;
+    @Autowired
     private DiaryRepository diaryRepo;
     @Autowired
     private BudgetRepository budgetRepo;
 
-    @BeforeAll
-    static void initAll() {
-
-    }
-
     @Test
     void givenDiary_whenSaveUsingEventRepo_thenSaveToOnlyEventAndDiaryTable() {
         Diary diary = new Diary(1,
-                new Timestamp(2020, 11, 11, 22, 0,0,0),
+                LocalDateTime.parse("2020-11-11T03:50:59"),
                 null,
                 "testdiary1",
                 "testdescription1",
-                0, 1,
+                0, 3,
                 null
         );
         long eventCount = eventRepo.count();
+        long durationCount = durationEventRepo.count();
+        long reminderCount = reminderRepo.count();
         long diaryCount = diaryRepo.count();
         long budgetCount = budgetRepo.count();
         Diary newDiary = eventRepo.save(diary);
         assertEquals(eventRepo.count(), eventCount+1);
+        assertEquals(durationEventRepo.count(), durationCount);
+        assertEquals(reminderRepo.count(), reminderCount);
         assertEquals(diaryRepo.count(), diaryCount+1);
         assertEquals(budgetRepo.count(), budgetCount);
     }

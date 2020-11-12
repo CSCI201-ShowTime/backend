@@ -2,7 +2,7 @@ package showtime.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import showtime.model.Budget;
+import showtime.model.Reminder;
 
-public interface BudgetRepository extends JpaRepository<Budget, Integer>, JpaSpecificationExecutor<Budget> {
+public interface ReminderRepository extends JpaRepository<Reminder, Integer>, JpaSpecificationExecutor<Reminder> {
 }

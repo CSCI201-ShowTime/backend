@@ -2,24 +2,26 @@ package showtime.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "duration_event")
 @PrimaryKeyJoinColumn(name = "eventid")
 public class DurationEvent extends Event {
 
-    @Id
-    @Column(name = "eventid", nullable = false, unique = true)
-    @NotNull
-    private int eventid;
-
     @Column(name = "remind_time")
-    private Timestamp remindTime;
+    private LocalDateTime remindTime;
+
+    public DurationEvent(@NotNull int userid, @NotNull LocalDateTime start, LocalDateTime end,
+                         @NotNull String title, String description,
+                         @NotNull int visibility, @NotNull int type, String location,
+                         LocalDateTime remindTime) {
+        super(userid, start, end, title, description, visibility, type, location);
+        this.remindTime = remindTime;
+    }
 
     public DurationEvent() {
     }
@@ -27,26 +29,15 @@ public class DurationEvent extends Event {
     @Override
     public String toString() {
         return "DurationEvent{" +
-                "eventid=" + eventid +
-                ", remind_time=" + remindTime +
-                '}';
+                "remindTime=" + remindTime +
+                "} " + super.toString();
     }
 
-    @Override
-    public int getEventid() {
-        return eventid;
-    }
-
-    @Override
-    public void setEventid(int eventid) {
-        this.eventid = eventid;
-    }
-
-    public Timestamp getRemindTime() {
+    public LocalDateTime getRemindTime() {
         return remindTime;
     }
 
-    public void setRemindTime(Timestamp remind_time) {
+    public void setRemindTime(LocalDateTime remind_time) {
         this.remindTime = remind_time;
     }
 }

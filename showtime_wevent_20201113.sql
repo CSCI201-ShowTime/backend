@@ -41,7 +41,7 @@ CREATE TABLE `budget` (
 
 LOCK TABLES `budget` WRITE;
 /*!40000 ALTER TABLE `budget` DISABLE KEYS */;
-INSERT INTO `budget` VALUES (2,999.000,NULL,NULL),(3,-5.000,NULL,3);
+INSERT INTO `budget` VALUES (3,-5.000,NULL,4);
 /*!40000 ALTER TABLE `budget` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,7 +66,7 @@ CREATE TABLE `diary` (
 
 LOCK TABLES `diary` WRITE;
 /*!40000 ALTER TABLE `diary` DISABLE KEYS */;
-INSERT INTO `diary` VALUES (1),(4),(5);
+INSERT INTO `diary` VALUES (1),(2);
 /*!40000 ALTER TABLE `diary` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,6 +92,7 @@ CREATE TABLE `duration_event` (
 
 LOCK TABLES `duration_event` WRITE;
 /*!40000 ALTER TABLE `duration_event` DISABLE KEYS */;
+INSERT INTO `duration_event` VALUES (4,'2020-10-02 15:30:00'),(5,NULL);
 /*!40000 ALTER TABLE `duration_event` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,7 +126,7 @@ CREATE TABLE `event` (
 
 LOCK TABLES `event` WRITE;
 /*!40000 ALTER TABLE `event` DISABLE KEYS */;
-INSERT INTO `event` VALUES (1,5,'2020-10-01 10:00:00',NULL,'','redkeopp teach 104',0,3,NULL),(2,5,'2020-10-15 12:00:00',NULL,'','redekopp buy gtx3090',0,4,NULL),(3,6,'2020-10-12 12:00:00',NULL,'','cote owe kempe coffee',0,4,NULL),(4,1,'2020-10-20 20:00:00',NULL,'','goodknee drop 109',0,3,NULL),(5,5,'2020-10-29 14:00:00',NULL,'','redekopp teach 109',0,3,NULL);
+INSERT INTO `event` VALUES (1,1,'2020-10-05 14:00:00',NULL,'teach 104','array',0,3,NULL),(2,1,'2020-10-12 09:30:00',NULL,'teach 104','tree',0,3,NULL),(3,1,'2020-10-12 09:30:00',NULL,'starbucks','owe goodknee coffee',1,4,NULL),(4,2,'2020-10-02 16:00:00','2020-10-02 17:30:00','csci meeting','',2,1,NULL),(5,3,'2020-10-02 16:00:00','2020-10-02 17:30:00','csci meeting','new tree array',2,1,NULL),(6,4,'2020-10-02 21:00:00',NULL,'new starbucks','try new coffee',0,2,NULL);
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,63 +152,8 @@ CREATE TABLE `reminder` (
 
 LOCK TABLES `reminder` WRITE;
 /*!40000 ALTER TABLE `reminder` DISABLE KEYS */;
+INSERT INTO `reminder` VALUES (6,'2020-10-02 15:30:00',6);
 /*!40000 ALTER TABLE `reminder` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `spring_session`
---
-
-DROP TABLE IF EXISTS `spring_session`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `spring_session` (
-  `PRIMARY_ID` char(36) NOT NULL,
-  `SESSION_ID` char(36) NOT NULL,
-  `CREATION_TIME` bigint NOT NULL,
-  `LAST_ACCESS_TIME` bigint NOT NULL,
-  `MAX_INACTIVE_INTERVAL` int NOT NULL,
-  `EXPIRY_TIME` bigint NOT NULL,
-  `PRINCIPAL_NAME` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`PRIMARY_ID`),
-  UNIQUE KEY `SPRING_SESSION_IX1` (`SESSION_ID`),
-  KEY `SPRING_SESSION_IX2` (`EXPIRY_TIME`),
-  KEY `SPRING_SESSION_IX3` (`PRINCIPAL_NAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `spring_session`
---
-
-LOCK TABLES `spring_session` WRITE;
-/*!40000 ALTER TABLE `spring_session` DISABLE KEYS */;
-/*!40000 ALTER TABLE `spring_session` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `spring_session_attributes`
---
-
-DROP TABLE IF EXISTS `spring_session_attributes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `spring_session_attributes` (
-  `SESSION_PRIMARY_ID` char(36) NOT NULL,
-  `ATTRIBUTE_NAME` varchar(200) NOT NULL,
-  `ATTRIBUTE_BYTES` blob NOT NULL,
-  PRIMARY KEY (`SESSION_PRIMARY_ID`,`ATTRIBUTE_NAME`),
-  CONSTRAINT `SPRING_SESSION_ATTRIBUTES_FK` FOREIGN KEY (`SESSION_PRIMARY_ID`) REFERENCES `spring_session` (`PRIMARY_ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `spring_session_attributes`
---
-
-LOCK TABLES `spring_session_attributes` WRITE;
-/*!40000 ALTER TABLE `spring_session_attributes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `spring_session_attributes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -238,7 +184,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'mark@usc.edu','redekopp','redekopp','Mark','Redekopp',34.0224,-118.2851),(2,'cote@gmail.com','cote','cote1234','Aaron','Cote',91,181),(3,'kempe@gmail.com','kempe','kempe123','David','Kempe',34.0224,-118.2851),(4,'goodknee','goodknee','goodknee','Andrew','Goodney',91,181),(5,'def1@usc.edu','username','password','Tommy','Trojan',34.0224,-118.2851),(6,'def2@usc.edu','username2','password2','Dummy','Trojan',1.3521,103.8198),(7,'def3@usc.edu','username3','password3','Gary','Gao',34.7466,113.6253);
+INSERT INTO `user` VALUES (1,'mark@usc.edu','redekopp','redekopp','Mark','Redekopp',34.0224,-118.2851),(2,'cote@gmail.com','cote','cote1234','Aaron','Cote',91,181),(3,'kempe@gmail.com','kempe','kempe123','David','Kempe',34.0224,-118.2851),(4,'goodknee','goodknee','goodknee','Andrew','Goodney',91,181),(11,'def1@usc.edu','username','password','Tommy','Trojan',34.0224,-118.2851),(12,'def2@usc.edu','username2','password2','Dummy','Trojan',1.3521,103.8198),(13,'def3@usc.edu','username3','password3','Gary','Gao',34.7466,113.6253);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -251,4 +197,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-12  1:44:46
+-- Dump completed on 2020-11-13  0:10:38

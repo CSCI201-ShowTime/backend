@@ -6,8 +6,9 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.4.1
-- Added `EVENT/POST`. Ongoing testing. Major change to entity class planned for next update.
+Backend: v0.4.2
+- Added `EVENT/POST`. Finished testing.
+- Removed `id` from `Event` children in Java. Retained in DB.
 
 Front-end: 778736c
 

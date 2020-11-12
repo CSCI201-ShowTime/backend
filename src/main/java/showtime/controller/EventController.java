@@ -12,17 +12,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import showtime.model.DurationEvent;
 import showtime.model.Event;
+import showtime.model.Reminder;
+import showtime.repository.BudgetRepository;
+import showtime.repository.DiaryRepository;
+import showtime.repository.DurationEventRepository;
 import showtime.repository.EventRepository;
+import showtime.repository.ReminderRepository;
 import showtime.service.EventSpecification;
 
 import java.sql.SQLSyntaxErrorException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/event")
 public class EventController {
 
     Logger logger = LoggerFactory.getLogger(EventController.class);
@@ -30,21 +37,16 @@ public class EventController {
     @Autowired
     EventRepository eventRepo;
 
-    /**
-     * Responds to "/api/event.GET" requests. Retrieves all events matching criteria in the database.
-     *
-     * @param params criteria to match
-     * @return {@code 200 OK} if any (including 0) events are found
-     */
-    @GetMapping("/event/rawevent")
-    public ResponseEntity<List<Event>> getRawEventByAllSpecs(@RequestParam MultiValueMap<String, String> params) {
+    @GetMapping("/rawevent")
+    public ResponseEntity<List<Event>> getRawEventByCriteria(
+            @RequestParam MultiValueMap<String, String> params) {
 
         logger.debug(params.toString());
         List<Event> eventO = eventRepo.findAll(new EventSpecification(params));
         return new ResponseEntity<>(eventO, HttpStatus.OK);
     }
 
-    @PostMapping("event/rawevent")
+    @PostMapping("/rawevent")
     public ResponseEntity<Event> createNewEvent(@RequestBody Event event) {
         Event newEvent = eventRepo.save(event);
         return new ResponseEntity<>(newEvent, HttpStatus.CREATED);
