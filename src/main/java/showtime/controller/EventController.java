@@ -75,6 +75,8 @@ public class EventController {
                 Budget.class, br, BudgetSpecBuilderService.newBudgetBuilder());
     }*/
 
+    // TODO: Security checks
+
     @GetMapping({"/rawevent", "/durationevent", "/reminder", "/diary", "/budget"})
     public ResponseEntity<?> getEventByCriteria(
             HttpServletRequest request,
@@ -122,10 +124,38 @@ public class EventController {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/rawevent")
-    public ResponseEntity<Event> createNewEvent(@RequestBody Event event) {
-        Event newEvent = eventRepo.save(event);
-        return new ResponseEntity<>(newEvent, HttpStatus.CREATED);
+    // TODO: separate logic?
+
+    @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
+    public ResponseEntity<Event> createNewEvent(
+            HttpServletRequest request,
+            @RequestBody Event event) {
+
+        // "/api/event/rawevent"
+        String requestURI = request.getRequestURI();
+
+        Event savedEvent = null;
+        if(requestURI.equals("/api/event/durationevent")) {
+            DurationEvent durationEvent = (DurationEvent) event;
+            savedEvent = durationEventRepo.save(durationEvent);
+        }
+        else if(requestURI.equals("/api/event/reminder")) {
+            Reminder reminder = (Reminder) event;
+            savedEvent = reminderRepo.save(reminder);
+        }
+        else if(requestURI.equals("/api/event/diary")) {
+            Diary diary = (Diary) event;
+            savedEvent = diaryRepo.save(diary);
+        }
+        else if(requestURI.equals("/api/event/budget")) {
+            Budget budget = (Budget) event;
+            savedEvent = budgetRepo.save(budget);
+        }
+        else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(savedEvent, HttpStatus.CREATED);
     }
 
     private static class URIRepoSpecTHC {

@@ -6,9 +6,8 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.4.3a1
-- Changed `Event` repositories to extend common `EventBase` repository.
-  Continued bug fix in `Specification`.
+Backend: v0.4.4
+- Added `event/POST` for testing.
   I have no idea what is working, and what is not working.
 
 Front-end: 778736c
