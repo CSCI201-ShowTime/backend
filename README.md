@@ -6,9 +6,10 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.4.2
-- Added `EVENT/POST`. Finished testing.
-- Removed `id` from `Event` children in Java. Retained in DB.
+Backend: v0.4.3a1
+- Changed `Event` repositories to extend common `EventBase` repository.
+  Continued bug fix in `Specification`.
+  I have no idea what is working, and what is not working.
 
 Front-end: 778736c
 

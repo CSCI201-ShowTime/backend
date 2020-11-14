@@ -1,6 +1,7 @@
 package showtime.model;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "duration_event")
 @PrimaryKeyJoinColumn(name = "eventid")
+@DiscriminatorValue("1")
 public class DurationEvent extends Event {
 
     @Column(name = "remind_time")

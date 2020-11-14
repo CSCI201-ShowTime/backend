@@ -1,6 +1,7 @@
 package showtime.model;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "diary")
 @PrimaryKeyJoinColumn(name = "eventid")
+@DiscriminatorValue("3")
 public class Diary extends Event {
 
     public Diary(@NotNull int userid, @NotNull LocalDateTime start, LocalDateTime end,

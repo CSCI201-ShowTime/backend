@@ -27,20 +27,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EventSpecBuilderSvcTest {
 
     @Autowired
     EventRepository eventRepo;
-    @Autowired
-    private DiaryRepository diaryRepo;
-    @Autowired
-    private BudgetRepository budgetRepo;
 
     @Test
     void givenUserid_whenQuery_thenReturnMatch() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.add("userid", "1");
+        Specification<Event> spec = new EventSpecBuilderService<>()
+                .fromMultiValueMap(mvp)
+                .build();
+
+        List<Event> event = eventRepo.findAll(spec);
+        assertEquals(3, event.size());
+        for(int i=0; i<3; i++) {
+            assertEquals(1, event.get(i).getUserid());
+        }
+    }
+
+    @Test
+    void givenMultipleUserid_whenQuery_thenReturnMatchOnFirst() {
+        MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
+        mvp.addAll("userid", List.of("1", "2", "3", "NaNImAStr"));
         Specification<Event> spec = new EventSpecBuilderService<>()
                 .fromMultiValueMap(mvp)
                 .build();
@@ -179,6 +189,24 @@ public class EventSpecBuilderSvcTest {
 
         List<Event> event = eventRepo.findAll(spec);
         assertEquals(6, event.size());
+    }
+
+    @Test
+    void givenSpecWithAllCriteria_whenQuery_thenNarrowToOne() {
+        MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
+        mvp.add("userid", "1");
+        mvp.addAll("start", List.of("2020-10-01T00:00:00", "2020-10-31T23:59:59"));
+        mvp.add("title", "teach 104");
+        mvp.add("description", "array");
+        mvp.add("visibility", "0");
+        mvp.addAll("type", List.of("1", "2", "3", "4"));
+        Specification<Event> spec = new EventSpecBuilderService<>()
+                .fromMultiValueMap(mvp)
+                .build();
+
+        List<Event> event = eventRepo.findAll(spec);
+        assertEquals(1, event.size());
+        assertEquals(1, event.get(0).getEventid());
     }
 
 }

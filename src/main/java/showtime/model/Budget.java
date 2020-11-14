@@ -1,6 +1,7 @@
 package showtime.model;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "budget")
 @PrimaryKeyJoinColumn(name = "eventid")
+@DiscriminatorValue("4")
 public class Budget extends Event {
 
     @Column(name = "amount", nullable = false, columnDefinition="Decimal(11,3)")

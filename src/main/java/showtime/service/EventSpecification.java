@@ -18,7 +18,7 @@ import java.util.List;
  * Generates a {@code Specification<Event>} using the given values
  * in a {@code MultiValueMap}.
  */
-@Deprecated(since = "v0.4.1")
+@Deprecated(since = "v0.4.2")
 public class EventSpecification implements Specification<Event> {
 
     Logger logger = LoggerFactory.getLogger(EventSpecification.class);

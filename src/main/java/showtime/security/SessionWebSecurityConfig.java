@@ -33,7 +33,7 @@ public class SessionWebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/images/**").permitAll()
                     .antMatchers("/js/**").permitAll()
                     .antMatchers("/api/**").permitAll()
-                    .anyRequest().authenticated();
+                    .anyRequest().permitAll();//.authenticated();
         http
                 // login page, call to "/auth/login", onSuccess redirect:/timeline
                 .formLogin()

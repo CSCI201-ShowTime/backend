@@ -23,10 +23,16 @@ public class EventSpecBuilderService<T extends Event> {
 
     Logger logger = LoggerFactory.getLogger(EventSpecBuilderService.class);
 
+/*    protected EventSpecBuilderService() { }
+
+    public static EventSpecBuilderService<Event> newEventBuilder() {
+        return new EventSpecBuilderService<>();
+    }*/
+
     /**
      * Finds all.
      */
-    Specification<T> spec = (root, query, criteriaBuilder) -> criteriaBuilder.and();
+    protected Specification<T> spec = (root, query, criteriaBuilder) -> criteriaBuilder.and();
 
     /**
      * Constrains eventid.

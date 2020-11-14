@@ -35,8 +35,29 @@ public class MVPUtil {
     /**
      * Further converts {@code ArrayList<Integer>} to {@code int[]}.
      */
+    @Deprecated(since = "v0.4.3", forRemoval = true)
     public static int[] parseIntToArray(List<String> mapValue) {
         return parseIntNoexcept(mapValue).stream().mapToInt(i->i).toArray();
+    }
+
+    /**
+     * Converts the values from {@code LinkedList<String>} to
+     * {@code ArrayList<Double>}. Ignores malformed values during parsing.
+     *
+     * @param mapValue values from {@code MultiValueMap}
+     * @return converted values
+     */
+    public static ArrayList<Double> parseDoubleNoexcept(List<String> mapValue) {
+        ArrayList<Double> list = new ArrayList<>();
+        if(mapValue != null) {
+            for(String each : mapValue) {
+                try {
+                    list.add(Double.parseDouble(each));
+                }
+                catch(NumberFormatException nfe) { }
+            }
+        }
+        return list;
     }
 
     /**
@@ -62,6 +83,7 @@ public class MVPUtil {
     /**
      * Further converts {@code ArrayList<String>} to {@code String[]}.
      */
+    @Deprecated(since = "v0.4.3", forRemoval = true)
     public static String[] toStringToArray(List<String> mapValue) {
         return toStringNoexcept(mapValue).toArray(new String[0]);
     }
@@ -91,6 +113,7 @@ public class MVPUtil {
      * Further converts {@code ArrayList<LocalDateTime>} to
      * {@code LocalDateTime[]}.
      */
+    @Deprecated(since = "v0.4.3", forRemoval = true)
     public static LocalDateTime[] parseDateTimeToArray(List<String> mapValue) {
         return parseDateTimeNoexcept(mapValue).toArray(new LocalDateTime[0]);
     }
