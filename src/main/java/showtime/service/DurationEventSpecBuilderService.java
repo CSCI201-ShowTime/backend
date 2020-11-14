@@ -16,7 +16,7 @@ public class DurationEventSpecBuilderService extends EventSpecBuilderService<Dur
     }*/
 
     public DurationEventSpecBuilderService byRemindTime(List<LocalDateTime> remindTime) {
-        spec.and(new SpecBetweenTwoEqualOneFrom<>("remindTime", remindTime));
+        spec = spec.and(new SpecBetweenTwoEqualOneFrom<>("remindTime", remindTime));
         return this;
     }
 

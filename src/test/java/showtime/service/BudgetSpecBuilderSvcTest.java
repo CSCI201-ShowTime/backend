@@ -34,14 +34,6 @@ public class BudgetSpecBuilderSvcTest {
         assertEquals(0, eventList.size());
     }
 
-/*    @Test
-    void givenBudgetSpecFromSingleMethod_whenQueryBudget_thenReturnMatch() {
-        Specification<Budget> specBudget = new BudgetSpecBuilderService().testAmount();
-        List<Budget> eventList = budgetRepo.findAll(specBudget);
-
-        assertEquals(0, eventList.size());
-    }*/
-
     @Test
     void givenBudgetSpecFromScratch_whenQueryBudget_thenReturnMatch() {
         Specification<Budget> specBudget = (root, query, criteriaBuilder) ->

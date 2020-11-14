@@ -19,11 +19,6 @@ public class BudgetSpecBuilderService extends EventSpecBuilderService<Budget> {
     }*/
 
     public BudgetSpecBuilderService byAmount(List<Double> amount) {
-/*        spec = spec.and((root, query, criteriaBuilder) -> {
-            // https://stackoverflow.com/questions/48529445/spring-data-jpa-specification-inheritance
-            //Root<Budget> budgetRoot = criteriaBuilder.treat(root, Budget.class);
-            return criteriaBuilder.equal(root.get("amount"), 0.0);
-        });*/
         spec = spec.and(new SpecEqualOneFrom<>("amount", amount));
         return this;
     }
@@ -40,7 +35,7 @@ public class BudgetSpecBuilderService extends EventSpecBuilderService<Budget> {
 
     @Override
     public BudgetSpecBuilderService fromMultiValueMap(MultiValueMap<String, String> params) {
-        //super.fromMultiValueMap(params);
+        super.fromMultiValueMap(params);
         byAmount( MVPUtil.parseDoubleNoexcept(params.get("amount")) );
         byCategory( MVPUtil.toStringNoexcept(params.get("category")) );
         byTransactionUserid( MVPUtil.parseIntNoexcept(params.get("transactionuserid")) );
