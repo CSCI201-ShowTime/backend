@@ -13,7 +13,8 @@ document.querySelector("form").onsubmit = function(event) {
 
 		// B (v0.2.6): disables encryption, causes unknown error, unable to fix atm
 		// Li (v0.2.6): encodes password before sending to server 
-		//let encoded = CryptoJS.MD5(password + "ShoWTimE").toString();
+		// Li (v0.4.5): add encodes password before sending to server again
+		let encoded = CryptoJS.MD5(password + "ShoWTimE").toString();
 
 		// B (v0.2.6): updated AJAX request
 		// B todo: move login AJAX to separate file?
@@ -30,7 +31,7 @@ document.querySelector("form").onsubmit = function(event) {
 	    		email: email,
 	    		fname: fname,
 				lname: lname,
-	    		password: password
+	    		password: encoded
 			})
 		})
 		.done(function( data, textStatus, jqXHR ) {

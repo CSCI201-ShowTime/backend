@@ -11,12 +11,19 @@ document.querySelector("form").onsubmit = function(event) {
 	} else {
 		document.querySelector(".error").innerHTML = "";
 		document.querySelector(".error").style.display = "none";
-		let email = $("#email").val();
+
+
 		let password = $("#password").val();
+		let email = $("#email").val();
 
 		// B (v0.2.6): disables encryption, causes unknown error, unable to fix atm
 		// Li (v0.2.6): encrypts password before sending to server 
-		//var encoded = CryptoJS.MD5(password + "ShoWTimE");
+		// Li (v0.4.5): add encrypts password before sending to server again
+		var encoded = CryptoJS.MD5(password + "ShoWTimE");
+        alert(encoded);
+		document.querySelector("#password").value = encoded;
+		
+		password = $("#password").val();
 
 		// B (v0.2.6): moved login-server.js inline
 		// B todo: move login AJAX to separate file? test AJAX chaining using .done()
