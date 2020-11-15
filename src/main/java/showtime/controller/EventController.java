@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,9 +33,11 @@ import showtime.service.EventSpecBuilder;
 import showtime.service.ReminderSpecBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/event")
@@ -42,7 +45,7 @@ public class EventController {
 
     Logger logger = LoggerFactory.getLogger(EventController.class);
 
-/*    @Autowired
+    @Autowired
     private EventRepository eventRepo;
     @Autowired
     private DurationEventRepository durationEventRepo;
@@ -51,7 +54,7 @@ public class EventController {
     @Autowired
     private DiaryRepository diaryRepo;
     @Autowired
-    private BudgetRepository budgetRepo;*/
+    private BudgetRepository budgetRepo;
 
     // Because of constraint on JpaSpecificationExecutor, currently used as raw type
     @SuppressWarnings("rawtypes")
@@ -134,17 +137,47 @@ public class EventController {
         }*/
     }
 
-    @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
-    public ResponseEntity<Event> createNewEvent(
+    // TODO: Polymorphic behavior
+
+    @PostMapping("/durationevent")
+    public ResponseEntity<DurationEvent> createDurationEvent(@RequestBody DurationEvent dEvent) {
+
+        DurationEvent saved = (DurationEvent) repos.get("/api/event/durationevent").save(dEvent);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/reminder")
+    public ResponseEntity<Reminder> createReminder(@RequestBody Reminder reminder) {
+
+        Reminder saved = (Reminder) repos.get("/api/event/reminder").save(reminder);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/diary")
+    public ResponseEntity<Diary> createDiary(@RequestBody Diary diary) {
+
+        Diary saved = (Diary) repos.get("/api/event/diary").save(diary);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/budget")
+    public ResponseEntity<Budget> createBudget(@RequestBody Budget budget) {
+
+        Budget saved = (Budget) repos.get("/api/event/budget").save(budget);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+/*    @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
+    public ResponseEntity<Event> createEvent(
             HttpServletRequest request,
             @RequestBody Event event) {
 
         // "/api/event/rawevent"
         String requestURI = request.getRequestURI();
 
-        Event savedEvent = (Event) repos.get(requestURI).save(event);
+        //Event savedEvent = (Event) repos.get(requestURI).save(event);
 
-/*        Event savedEvent = null;
+*//*        Event savedEvent = null;
         if(requestURI.equals("/api/event/durationevent")) {
             DurationEvent durationEvent = (DurationEvent) event;
             savedEvent = durationEventRepo.save(durationEvent);
@@ -160,8 +193,94 @@ public class EventController {
         else if(requestURI.equals("/api/event/budget")) {
             Budget budget = (Budget) event;
             savedEvent = budgetRepo.save(budget);
-        }*/
+        }*//*
 
-        return new ResponseEntity<>(savedEvent, HttpStatus.CREATED);
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
+    }*/
+
+    @PutMapping("/durationevent")
+    public ResponseEntity<DurationEvent> updateDurationEvent(@RequestBody DurationEvent dEvent) {
+
+        Optional<DurationEvent> found = repos.get("/api/event/durationevent").findById(dEvent.getEventid());
+        if(found.isPresent()) {
+            DurationEvent original = found.get();
+            original.setStart(dEvent.getStart());
+            original.setEnd(dEvent.getEnd());
+            original.setTitle(dEvent.getTitle());
+            original.setDescription(dEvent.getDescription());
+            original.setVisibility(dEvent.getVisibility());
+            original.setLocation(dEvent.getLocation());
+            original.setRemindTime(dEvent.getRemindTime());
+
+            DurationEvent saved = (DurationEvent) repos.get("/api/event/durationevent").save(original);
+
+            return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/reminder")
+    public ResponseEntity<Reminder> updateReminder(@RequestBody Reminder reminder) {
+
+        Optional<Reminder> found = repos.get("/api/event/reminder").findById(reminder.getEventid());
+        if(found.isPresent()) {
+            Reminder original = found.get();
+            original.setStart(reminder.getStart());
+            original.setEnd(reminder.getEnd());
+            original.setTitle(reminder.getTitle());
+            original.setDescription(reminder.getDescription());
+            original.setVisibility(reminder.getVisibility());
+            original.setLocation(reminder.getLocation());
+            original.setRemindTime(reminder.getRemindTime());
+            original.setPriority(reminder.getPriority());
+
+            Reminder saved = (Reminder) repos.get("/api/event/reminder").save(original);
+
+            return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/diary")
+    public ResponseEntity<Diary> updateDiary(@RequestBody Diary diary) {
+
+        Optional<Diary> found = repos.get("/api/event/diary").findById(diary.getEventid());
+        if(found.isPresent()) {
+            Diary original = found.get();
+            original.setStart(diary.getStart());
+            original.setEnd(diary.getEnd());
+            original.setTitle(diary.getTitle());
+            original.setDescription(diary.getDescription());
+            original.setVisibility(diary.getVisibility());
+            original.setLocation(diary.getLocation());
+
+            Diary saved = (Diary) repos.get("/api/event/diary").save(original);
+
+            return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/budget")
+    public ResponseEntity<Budget> updateBudget(@RequestBody Budget budget) {
+
+        Optional<Budget> found = repos.get("/api/event/budget").findById(budget.getEventid());
+        if(found.isPresent()) {
+            Budget original = found.get();
+            original.setStart(budget.getStart());
+            original.setEnd(budget.getEnd());
+            original.setTitle(budget.getTitle());
+            original.setDescription(budget.getDescription());
+            original.setVisibility(budget.getVisibility());
+            original.setLocation(budget.getLocation());
+            original.setAmount(budget.getAmount());
+            original.setCategory(budget.getCategory());
+            original.setEbudTransactionUserid(budget.getEbudTransactionUserid());
+
+            Budget saved = (Budget) repos.get("/api/event/budget").save(original);
+
+            return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }

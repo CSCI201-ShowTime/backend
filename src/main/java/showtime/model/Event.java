@@ -1,5 +1,7 @@
 package showtime.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;

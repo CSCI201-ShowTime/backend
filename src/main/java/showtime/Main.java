@@ -21,6 +21,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,17 +37,28 @@ public class Main {
     EventRepository eventRepo;
     @Autowired
     BudgetRepository budgetRepo;
+    @Autowired
+    BudgetRepository diaryRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
 
-            List<EventBaseRepository> ebrl = new ArrayList<>();
-            ebrl.add(eventRepo);
-            ebrl.add(budgetRepo);
+            Diary diary = new Diary(11,
+                    LocalDateTime.parse("2020-11-11T03:50:59"),
+                    null,
+                    "test diary2",
+                    "test diary description 2",
+                    0, 65534,
+                    null
+            );
+            Diary savedDiary = (Diary) eventRepo.save(diary);
+            System.out.println(savedDiary.getType());
+            int savedId = savedDiary.getEventid();
+            System.out.println(savedId);
+            Diary retrievedDiary = (Diary) eventRepo.findById(savedId).get();
+            System.out.println(retrievedDiary.getType());
 
-            List<Event> e = ebrl.get(1).findAll(new BudgetSpecBuilder().byAmount(List.of(5.0)).build());
-            System.out.println(e);
         };
     }
 }

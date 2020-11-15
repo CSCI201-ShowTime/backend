@@ -6,11 +6,20 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.4.5
-- Merged Li's.
-- Fixed bug when using Hibernate `@Discriminator`.
-- Added repositories into `List`.
-- Added tests.
+Backend: v0.5.0 RAVIOLI
+- Good news: Everything works.
+- Bad news: beetles, fireflies, caterpillars, centipedes, everything has bugs.
+  Everything is copy-pasted, hard-coded, and nothing is OOP.
+  If not because he has finals, just fire the guy who wrote the backend.
+
+Known issues
+- When creating a new `Event`, even when sent to a specific URI, 
+  Jackson will auto deserialize the received `JSON` to a subclass based on its fields,
+  and the `Repository` will save to the database according to the converted subclass.
+  e.g. If the `JSON` contains fields in `Budget`, even when sent to `api/event/durationevent`,
+  it will be saved to `Budget`.
+- `event/POST` has undergone very basic testing.
+- Security is temporarily disabled.
 
 Front-end: 778736c
 
