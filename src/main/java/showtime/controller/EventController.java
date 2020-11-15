@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @RestController
 @RequestMapping("/api/event")
@@ -60,7 +61,7 @@ public class EventController {
     @SuppressWarnings("rawtypes")
     private final Map<String, EventBaseRepository> repos;
     @SuppressWarnings("rawtypes")
-    private final Map<String, EventSpecBuilder> specs;
+    private final Map<String, Supplier<EventSpecBuilder>> specs;
 
     @Autowired
     public EventController(EventRepository er,
@@ -76,11 +77,11 @@ public class EventController {
         repos.put("/api/event/budget", br);
 
         specs = new HashMap<>();
-        specs.put("/api/event/rawevent", EventSpecBuilder.createBuilder());
-        specs.put("/api/event/durationevent", DurationEventSpecBuilder.createBuilder());
-        specs.put("/api/event/reminder", ReminderSpecBuilder.createBuilder());
-        specs.put("/api/event/diary", DiarySpecBuilder.createBuilder());
-        specs.put("/api/event/budget", BudgetSpecBuilder.createBuilder());
+        specs.put("/api/event/rawevent", EventSpecBuilder::createBuilder);
+        specs.put("/api/event/durationevent", DurationEventSpecBuilder::createBuilder);
+        specs.put("/api/event/reminder", ReminderSpecBuilder::createBuilder);
+        specs.put("/api/event/diary", DiarySpecBuilder::createBuilder);
+        specs.put("/api/event/budget", BudgetSpecBuilder::createBuilder);
     }
 
     // TODO: Security checks
@@ -95,7 +96,7 @@ public class EventController {
 
         @SuppressWarnings("unchecked")
         List<Event> eventList = repos.get(requestURI).findAll(
-                specs.get(requestURI).fromMultiValueMap(params).build()
+                specs.get(requestURI).get().fromMultiValueMap(params).build()
         );
 
         return new ResponseEntity<>(eventList, HttpStatus.OK);

@@ -6,11 +6,13 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.5.0 RAVIOLI
+Backend: v0.5.1 RAVIOLI
 - Good news: Everything works.
 - Bad news: beetles, fireflies, caterpillars, centipedes, everything has bugs.
   Everything is copy-pasted, hard-coded, and nothing is OOP.
   If not because he has finals, just fire the guy who wrote the backend.
+- Fixed not creating a new `EventSpecBuilder` each time when calling `event/GET`.
+- Added sample code for `budget.html`.
 
 Known issues
 - When creating a new `Event`, even when sent to a specific URI, 
@@ -37,7 +39,7 @@ For detailed instructions, check instructions for Demo on
 
 #### Version Specific Instructions
 `login.html`
-- Integrated `login-server.js` in `login.js`. 
+- Integrated `server/login-server.js` in `login.js`. 
   May separate at later date to decouple front-end and backend.
 - Updated `AJAX` call in js.
 
@@ -45,5 +47,8 @@ For detailed instructions, check instructions for Demo on
 - Updated `AJAX` call in js. May separate.
 
 `account_page.html`
-- Included `logout-server.js` and `logout-navbar-temp.js`.
-  `logout-navbar-temp.js` should be integrated by front-end as fit.
+- Included `server/logout-server.js` and `server/logout-navbar-temp.js`.
+  `server/logout-navbar-temp.js` should be integrated by front-end as fit.
+  
+`budget.html`
+- Added sample code and `sample/budget-query-category.js`.

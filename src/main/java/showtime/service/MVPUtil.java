@@ -62,7 +62,7 @@ public class MVPUtil {
 
     /**
      * Converts the values from {@code LinkedList<String>} to
-     * {@code ArrayList<String>}.
+     * {@code ArrayList<String>}. Ignores empty {@code String}.
      *
      * @param mapValue values from {@code MultiValueMap}
      * @return converted values
@@ -71,10 +71,9 @@ public class MVPUtil {
         ArrayList<String> list = new ArrayList<>();
         if(mapValue != null) {
             for(String each : mapValue) {
-                try {
+                if(!each.equals("")) {
                     list.add(each);
                 }
-                catch(NumberFormatException nfe) { }
             }
         }
         return list;

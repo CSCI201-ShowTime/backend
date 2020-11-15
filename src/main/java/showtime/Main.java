@@ -33,7 +33,7 @@ public class Main {
         SpringApplication.run(Main.class, args);
     }
 
-    @Autowired
+/*    @Autowired
     EventRepository eventRepo;
     @Autowired
     BudgetRepository budgetRepo;
@@ -44,21 +44,6 @@ public class Main {
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
 
-            Diary diary = new Diary(11,
-                    LocalDateTime.parse("2020-11-11T03:50:59"),
-                    null,
-                    "test diary2",
-                    "test diary description 2",
-                    0, 65534,
-                    null
-            );
-            Diary savedDiary = (Diary) eventRepo.save(diary);
-            System.out.println(savedDiary.getType());
-            int savedId = savedDiary.getEventid();
-            System.out.println(savedId);
-            Diary retrievedDiary = (Diary) eventRepo.findById(savedId).get();
-            System.out.println(retrievedDiary.getType());
-
         };
-    }
+    }*/
 }
