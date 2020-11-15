@@ -1,7 +1,6 @@
 package showtime.service;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class BudgetSpecBuilderSvcTest {
+public class BudgetSpecBuilderTest {
 
     @Autowired
     private BudgetRepository budgetRepo;
@@ -26,7 +25,7 @@ public class BudgetSpecBuilderSvcTest {
     void givenBudgetSpec_whenQueryBudget_thenReturnMatch() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.add("amount", "0.00");
-        Specification<Budget> specBudget = new BudgetSpecBuilderService()
+        Specification<Budget> specBudget = new BudgetSpecBuilder()
                 .fromMultiValueMap(mvp)
                 .build();
         List<Budget> eventList = budgetRepo.findAll(specBudget);
@@ -41,5 +40,29 @@ public class BudgetSpecBuilderSvcTest {
         List<Budget> eventList = budgetRepo.findAll(specBudget);
 
         assertEquals(0, eventList.size());
+    }
+
+    @Test
+    void givenBudgetSpec_whenQueryBudgetAmount_thenReturnMatch() {
+        MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
+        mvp.add("amount", "-5");
+        Specification<Budget> specBudget = new BudgetSpecBuilder()
+                .fromMultiValueMap(mvp)
+                .build();
+        List<Budget> eventList = budgetRepo.findAll(specBudget);
+
+        assertEquals(1, eventList.size());
+    }
+
+    @Test
+    void givenBudgetSpec_whenQueryBudgetCategory_thenReturnMatch() {
+        MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
+        mvp.add("category", "coffee");
+        Specification<Budget> specBudget = new BudgetSpecBuilder()
+                .fromMultiValueMap(mvp)
+                .build();
+        List<Budget> eventList = budgetRepo.findAll(specBudget);
+
+        assertEquals(1, eventList.size());
     }
 }

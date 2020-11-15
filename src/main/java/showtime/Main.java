@@ -11,7 +11,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import showtime.model.Diary;
 import showtime.model.Event;
+import showtime.repository.BudgetRepository;
+import showtime.repository.EventBaseRepository;
 import showtime.repository.EventRepository;
+import showtime.service.BudgetSpecBuilder;
 import showtime.service.EventSpecification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -31,23 +34,19 @@ public class Main {
 
     @Autowired
     EventRepository eventRepo;
+    @Autowired
+    BudgetRepository budgetRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
 
-/*            Specification<Event> a = (Specification<Event>) (root, query, criteriaBuilder) -> {
-                return criteriaBuilder.between(root.get("userid"), 1, 1);
-            };
-            List<Event> e = eventRepo.findAll(a);
-            System.out.println(e);*/
-/*
-            List<String> list = new ArrayList<>();
-            list.add("2");
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.addAll("eventid", list);
-            Optional<Event> eventO = eventRepo.findOne(new EventSpecification(map));
-            System.out.println(eventO.get());*/
+            List<EventBaseRepository> ebrl = new ArrayList<>();
+            ebrl.add(eventRepo);
+            ebrl.add(budgetRepo);
+
+            List<Event> e = ebrl.get(1).findAll(new BudgetSpecBuilder().byAmount(List.of(5.0)).build());
+            System.out.println(e);
         };
     }
 }

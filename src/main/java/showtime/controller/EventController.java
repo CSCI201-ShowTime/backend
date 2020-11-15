@@ -3,21 +3,17 @@ package showtime.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import showtime.model.Budget;
 import showtime.model.Diary;
 import showtime.model.DurationEvent;
@@ -29,11 +25,11 @@ import showtime.repository.DurationEventRepository;
 import showtime.repository.EventBaseRepository;
 import showtime.repository.EventRepository;
 import showtime.repository.ReminderRepository;
-import showtime.service.BudgetSpecBuilderService;
-import showtime.service.DiarySpecBuilderService;
-import showtime.service.DurationEventSpecBuilderService;
-import showtime.service.EventSpecBuilderService;
-import showtime.service.ReminderSpecBuilderService;
+import showtime.service.BudgetSpecBuilder;
+import showtime.service.DiarySpecBuilder;
+import showtime.service.DurationEventSpecBuilder;
+import showtime.service.EventSpecBuilder;
+import showtime.service.ReminderSpecBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -46,7 +42,7 @@ public class EventController {
 
     Logger logger = LoggerFactory.getLogger(EventController.class);
 
-    @Autowired
+/*    @Autowired
     private EventRepository eventRepo;
     @Autowired
     private DurationEventRepository durationEventRepo;
@@ -55,25 +51,34 @@ public class EventController {
     @Autowired
     private DiaryRepository diaryRepo;
     @Autowired
-    private BudgetRepository budgetRepo;
+    private BudgetRepository budgetRepo;*/
 
-    private URIRepoSpecTHC thc = new URIRepoSpecTHC();
+    // Because of constraint on JpaSpecificationExecutor, currently used as raw type
+    @SuppressWarnings("rawtypes")
+    private final Map<String, EventBaseRepository> repos;
+    @SuppressWarnings("rawtypes")
+    private final Map<String, EventSpecBuilder> specs;
 
-    // TODO: dynamic builder
-/*    @Autowired
+    @Autowired
     public EventController(EventRepository er,
                            DurationEventRepository der,
                            ReminderRepository rr,
+                           DiaryRepository dr,
                            BudgetRepository br) {
-        thc.add("/api/event/rawevent",
-                Event.class, er, EventSpecBuilderService.newEventBuilder());
-        thc.add("/api/event/durationevent",
-                DurationEvent.class, der, DurationEventSpecBuilderService.newDurationEventBuilder());
-        thc.add("/api/event/reminder",
-                Reminder.class, rr, ReminderSpecBuilderService.newReminderBuilder());
-        thc.add("/api/event/budget",
-                Budget.class, br, BudgetSpecBuilderService.newBudgetBuilder());
-    }*/
+        repos = new HashMap<>();
+        repos.put("/api/event/rawevent", er);
+        repos.put("/api/event/durationevent", der);
+        repos.put("/api/event/reminder", rr);
+        repos.put("/api/event/diary", dr);
+        repos.put("/api/event/budget", br);
+
+        specs = new HashMap<>();
+        specs.put("/api/event/rawevent", EventSpecBuilder.createBuilder());
+        specs.put("/api/event/durationevent", DurationEventSpecBuilder.createBuilder());
+        specs.put("/api/event/reminder", ReminderSpecBuilder.createBuilder());
+        specs.put("/api/event/diary", DiarySpecBuilder.createBuilder());
+        specs.put("/api/event/budget", BudgetSpecBuilder.createBuilder());
+    }
 
     // TODO: Security checks
 
@@ -85,7 +90,14 @@ public class EventController {
         // "/api/event/rawevent"
         String requestURI = request.getRequestURI();
 
-        if(requestURI.equals("/api/event/rawevent")) {
+        @SuppressWarnings("unchecked")
+        List<Event> eventList = repos.get(requestURI).findAll(
+                specs.get(requestURI).fromMultiValueMap(params).build()
+        );
+
+        return new ResponseEntity<>(eventList, HttpStatus.OK);
+
+/*        if(requestURI.equals("/api/event/rawevent")) {
             Specification<Event> specRawEvent = new EventSpecBuilderService<>()
                     .fromMultiValueMap(params)
                     .build();
@@ -119,12 +131,8 @@ public class EventController {
                     .build();
             List<Budget> eventList = budgetRepo.findAll(specBudget);
             return new ResponseEntity<>(eventList, HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }*/
     }
-
-    // TODO: separate logic?
 
     @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
     public ResponseEntity<Event> createNewEvent(
@@ -134,7 +142,9 @@ public class EventController {
         // "/api/event/rawevent"
         String requestURI = request.getRequestURI();
 
-        Event savedEvent = null;
+        Event savedEvent = (Event) repos.get(requestURI).save(event);
+
+/*        Event savedEvent = null;
         if(requestURI.equals("/api/event/durationevent")) {
             DurationEvent durationEvent = (DurationEvent) event;
             savedEvent = durationEventRepo.save(durationEvent);
@@ -150,39 +160,8 @@ public class EventController {
         else if(requestURI.equals("/api/event/budget")) {
             Budget budget = (Budget) event;
             savedEvent = budgetRepo.save(budget);
-        }
-        else {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+        }*/
 
         return new ResponseEntity<>(savedEvent, HttpStatus.CREATED);
-    }
-
-    private static class URIRepoSpecTHC {
-
-        private final Map<String, Class<? extends Event>> keyContainer = new HashMap<>();
-        private final Map<Class<? extends Event>, Object> repoContainer = new HashMap<>();
-        private final Map<Class<? extends Event>, Object> specContainer = new HashMap<>();
-
-        public <T extends Event> void add(String uri,
-                                          Class<T> type,
-                                          EventBaseRepository<T> repo,
-                                          EventSpecBuilderService<T> svc) {
-            keyContainer.put(uri, type);
-            repoContainer.put(type, repo);
-            specContainer.put(type, svc);
-        }
-
-        @SuppressWarnings("unchecked")
-        public <T extends Event> EventBaseRepository<T> getRepo(String uri) {
-            Class<? extends Event> key = keyContainer.get(uri);
-            return (EventBaseRepository<T>) repoContainer.get(key);
-        }
-
-        @SuppressWarnings("unchecked")
-        public <T extends Event> EventSpecBuilderService<T> getSpec(String uri) {
-            Class<? extends Event> key = keyContainer.get(uri);
-            return (EventSpecBuilderService<T>) specContainer.get(key);
-        }
     }
 }

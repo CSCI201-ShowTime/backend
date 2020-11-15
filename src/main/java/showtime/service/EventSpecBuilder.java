@@ -19,15 +19,13 @@ import java.util.List;
  *
  * @param <T> type of {@code Specification}, must be subclass of {@code Event}
  */
-public class EventSpecBuilderService<T extends Event> {
+public class EventSpecBuilder<T extends Event> {
 
-    Logger logger = LoggerFactory.getLogger(EventSpecBuilderService.class);
+    Logger logger = LoggerFactory.getLogger(EventSpecBuilder.class);
 
-/*    protected EventSpecBuilderService() { }
-
-    public static EventSpecBuilderService<Event> newEventBuilder() {
-        return new EventSpecBuilderService<>();
-    }*/
+    public static <U extends Event> EventSpecBuilder<U> createBuilder() {
+        return new EventSpecBuilder<>();
+    }
 
     /**
      * Finds all.
@@ -37,7 +35,7 @@ public class EventSpecBuilderService<T extends Event> {
     /**
      * Constrains eventid.
      */
-    public EventSpecBuilderService<T> byEventid(int... eventid) {
+    public EventSpecBuilder<T> byEventid(int... eventid) {
         spec = eventid.length > 0
                 ? spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("eventid"), eventid[0]))
                 : spec;
@@ -47,7 +45,7 @@ public class EventSpecBuilderService<T extends Event> {
     /**
      * Constrains userid.
      */
-    public EventSpecBuilderService<T> byUserid(int... userid) {
+    public EventSpecBuilder<T> byUserid(int... userid) {
         spec = userid.length > 0
                 ? spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("userid"), userid[0]))
                 : spec;
@@ -58,7 +56,7 @@ public class EventSpecBuilderService<T extends Event> {
      * Constrains start. If one value is given, finds exact matches;
      * if two values are given, finds matches between range.
      */
-    public EventSpecBuilderService<T> byStart(LocalDateTime... start) {
+    public EventSpecBuilder<T> byStart(LocalDateTime... start) {
         if(start.length >= 2) {
             spec = spec.and(
                     (root, query, criteriaBuilder) -> criteriaBuilder.between(root.get("start"), start[0], start[1])
@@ -76,7 +74,7 @@ public class EventSpecBuilderService<T extends Event> {
      * Constrains end. If one value is given, finds exact matches;
      * if two values are given, finds matches between range.
      */
-    public EventSpecBuilderService<T> byEnd(LocalDateTime... end) {
+    public EventSpecBuilder<T> byEnd(LocalDateTime... end) {
         if(end.length >= 2) {
             spec = spec.and(
                     (root, query, criteriaBuilder) -> criteriaBuilder.between(root.get("end"), end[0], end[1])
@@ -93,7 +91,7 @@ public class EventSpecBuilderService<T extends Event> {
     /**
      * Constrains title. Matches using sql "like".
      */
-    public EventSpecBuilderService<T> byTitle(String... title) {
+    public EventSpecBuilder<T> byTitle(String... title) {
         spec = title.length > 0
                 ? spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), title[0]))
                 : spec;
@@ -103,7 +101,7 @@ public class EventSpecBuilderService<T extends Event> {
     /**
      * Constrains description. Matches using sql "like".
      */
-    public EventSpecBuilderService<T> byDescription(String... description) {
+    public EventSpecBuilder<T> byDescription(String... description) {
         spec = description.length > 0
                 ? spec.and(
                         (root, query, criteriaBuilder) ->
@@ -115,7 +113,7 @@ public class EventSpecBuilderService<T extends Event> {
     /**
      * Constrains visibility.
      */
-    public EventSpecBuilderService<T> byVisibility(int... visibility) {
+    public EventSpecBuilder<T> byVisibility(int... visibility) {
         spec = visibility.length > 0
                 ? spec.and(
                         (root, query, criteriaBuilder) ->
@@ -127,7 +125,7 @@ public class EventSpecBuilderService<T extends Event> {
     /**
      * Constrains type. Finds matches that matches any of the given type.
      */
-    public EventSpecBuilderService<T> byType(int... type) {
+    public EventSpecBuilder<T> byType(int... type) {
         if(type.length > 0) {
             spec = spec.and(
                     (root, query, criteriaBuilder) -> {
@@ -145,7 +143,7 @@ public class EventSpecBuilderService<T extends Event> {
     /**
      * Constrains location.
      */
-    public EventSpecBuilderService<T> byLocation(String... location) {
+    public EventSpecBuilder<T> byLocation(String... location) {
         spec = location.length > 0
                 ? spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("description"), location[0]))
                 : spec;
@@ -162,7 +160,7 @@ public class EventSpecBuilderService<T extends Event> {
     /**
      * Automatically adds constraints from {@code MultiValueMap}.
      */
-    public EventSpecBuilderService<T> fromMultiValueMap(MultiValueMap<String, String> params) {
+    public EventSpecBuilder<T> fromMultiValueMap(MultiValueMap<String, String> params) {
         byEventid( MVPUtil.parseIntToArray(params.get("eventid")) );
         byUserid( MVPUtil.parseIntToArray(params.get("userid")) );
         byStart( MVPUtil.parseDateTimeToArray(params.get("start")) );

@@ -2,39 +2,36 @@ package showtime.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.MultiValueMap;
 import showtime.model.Budget;
 
 import java.util.List;
 
-public class BudgetSpecBuilderService extends EventSpecBuilderService<Budget> {
+public class BudgetSpecBuilder extends EventSpecBuilder<Budget> {
 
-    Logger logger = LoggerFactory.getLogger(BudgetSpecBuilderService.class);
+    Logger logger = LoggerFactory.getLogger(BudgetSpecBuilder.class);
 
-/*    protected BudgetSpecBuilderService() { }
+    public static BudgetSpecBuilder createBuilder() {
+        return new BudgetSpecBuilder();
+    }
 
-    public static BudgetSpecBuilderService newBudgetBuilder() {
-        return new BudgetSpecBuilderService();
-    }*/
-
-    public BudgetSpecBuilderService byAmount(List<Double> amount) {
+    public BudgetSpecBuilder byAmount(List<Double> amount) {
         spec = spec.and(new SpecEqualOneFrom<>("amount", amount));
         return this;
     }
 
-    public BudgetSpecBuilderService byCategory(List<String> category) {
+    public BudgetSpecBuilder byCategory(List<String> category) {
         spec = spec.and(new SpecEqualOneFrom<>("category", category));
         return this;
     }
 
-    public BudgetSpecBuilderService byTransactionUserid(List<Integer> transxUserid) {
+    public BudgetSpecBuilder byTransactionUserid(List<Integer> transxUserid) {
         spec = spec.and(new SpecEqualOneFrom<>("ebudTransactionUserid", transxUserid));
         return this;
     }
 
     @Override
-    public BudgetSpecBuilderService fromMultiValueMap(MultiValueMap<String, String> params) {
+    public BudgetSpecBuilder fromMultiValueMap(MultiValueMap<String, String> params) {
         super.fromMultiValueMap(params);
         byAmount( MVPUtil.parseDoubleNoexcept(params.get("amount")) );
         byCategory( MVPUtil.toStringNoexcept(params.get("category")) );

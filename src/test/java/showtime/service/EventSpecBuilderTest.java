@@ -3,7 +3,6 @@ package showtime.service;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import showtime.model.Event;
-import showtime.repository.BudgetRepository;
-import showtime.repository.DiaryRepository;
 import showtime.repository.EventRepository;
 
 import java.time.LocalDateTime;
@@ -27,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class EventSpecBuilderSvcTest {
+public class EventSpecBuilderTest {
 
     @Autowired
     EventRepository eventRepo;
@@ -36,7 +33,7 @@ public class EventSpecBuilderSvcTest {
     void givenUserid_whenQuery_thenReturnMatch() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.add("userid", "1");
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 
@@ -51,7 +48,7 @@ public class EventSpecBuilderSvcTest {
     void givenMultipleUserid_whenQuery_thenReturnMatchOnFirst() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.addAll("userid", List.of("1", "2", "3", "NaNImAStr"));
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 
@@ -66,7 +63,7 @@ public class EventSpecBuilderSvcTest {
     void givenTwoStart_whenQuery_thenReturnWithinRange() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.addAll("start", List.of("2020-10-05T13:59:59", "2020-10-05T14:00:01"));
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 
@@ -79,7 +76,7 @@ public class EventSpecBuilderSvcTest {
     void givenOneStartInList_whenQuery_thenReturnExact() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.addAll("start", List.of("2020-10-05T14:00:00"));
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 
@@ -92,7 +89,7 @@ public class EventSpecBuilderSvcTest {
     void givenTwoEndThatIsSame_whenQuery_thenReturnExact() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.addAll("end", List.of("2020-10-02T17:30:00", "2020-10-02T17:30:00"));
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 
@@ -107,7 +104,7 @@ public class EventSpecBuilderSvcTest {
     void givenTitle_whenQuery_thenReturnMatch() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.add("title", "teach 104");
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 
@@ -123,7 +120,7 @@ public class EventSpecBuilderSvcTest {
     void givenDescription_whenQuery_thenReturnMatch() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.add("description", "owe goodknee coffee");
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 
@@ -136,7 +133,7 @@ public class EventSpecBuilderSvcTest {
     void givenVisibility_whenQuery_thenReturnMatch() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.add("visibility", "0");
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 
@@ -151,7 +148,7 @@ public class EventSpecBuilderSvcTest {
     void givenOneType_whenQuery_thenReturnMatch() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.add("type", "3");
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 
@@ -167,7 +164,7 @@ public class EventSpecBuilderSvcTest {
     void givenMultipleType_whenQuery_thenReturnMatch(int expected, int input1, int input2) {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.addAll("type", List.of(Integer.toString(input1), Integer.toString(input2)));
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 
@@ -183,7 +180,7 @@ public class EventSpecBuilderSvcTest {
     void givenZeroType_whenQuery_thenReturnAll() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
         mvp.add("type", "");
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 
@@ -200,7 +197,7 @@ public class EventSpecBuilderSvcTest {
         mvp.add("description", "array");
         mvp.add("visibility", "0");
         mvp.addAll("type", List.of("1", "2", "3", "4"));
-        Specification<Event> spec = new EventSpecBuilderService<>()
+        Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
 

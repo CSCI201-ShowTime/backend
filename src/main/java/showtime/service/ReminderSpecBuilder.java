@@ -7,21 +7,19 @@ import showtime.model.Reminder;
 
 import java.time.LocalDateTime;
 
-public class ReminderSpecBuilderService extends EventSpecBuilderService<Reminder> {
+public class ReminderSpecBuilder extends EventSpecBuilder<Reminder> {
 
-    Logger logger = LoggerFactory.getLogger(ReminderSpecBuilderService.class);
+    Logger logger = LoggerFactory.getLogger(ReminderSpecBuilder.class);
 
-/*    protected ReminderSpecBuilderService() { }
-
-    public static ReminderSpecBuilderService newReminderBuilder() {
-        return new ReminderSpecBuilderService();
-    }*/
+    public static ReminderSpecBuilder createBuilder() {
+        return new ReminderSpecBuilder();
+    }
 
     /**
      * Constrains remind time. If one value is given, finds exact matches;
      * if two values are given, finds matches between range.
      */
-    public ReminderSpecBuilderService byRemindTime(LocalDateTime... remindTime) {
+    public ReminderSpecBuilder byRemindTime(LocalDateTime... remindTime) {
         if(remindTime.length >= 2) {
             spec = spec.and(
                     (root, query, criteriaBuilder) ->
@@ -40,7 +38,7 @@ public class ReminderSpecBuilderService extends EventSpecBuilderService<Reminder
     /**
      * Constrains priority.
      */
-    public ReminderSpecBuilderService byPriority(int... priority) {
+    public ReminderSpecBuilder byPriority(int... priority) {
         spec = priority.length > 0
                 ? spec.and(
                 (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("priority"), priority[0]))
@@ -49,7 +47,7 @@ public class ReminderSpecBuilderService extends EventSpecBuilderService<Reminder
     }
 
     @Override
-    public ReminderSpecBuilderService fromMultiValueMap(MultiValueMap<String, String> params) {
+    public ReminderSpecBuilder fromMultiValueMap(MultiValueMap<String, String> params) {
         super.fromMultiValueMap(params);
         byRemindTime( MVPUtil.parseDateTimeToArray(params.get("remindtime")) );
         byPriority( MVPUtil.parseIntToArray(params.get("priority")) );

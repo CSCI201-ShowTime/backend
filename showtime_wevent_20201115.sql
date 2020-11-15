@@ -41,7 +41,7 @@ CREATE TABLE `budget` (
 
 LOCK TABLES `budget` WRITE;
 /*!40000 ALTER TABLE `budget` DISABLE KEYS */;
-INSERT INTO `budget` VALUES (3,-5.000,NULL,4);
+INSERT INTO `budget` VALUES (3,-5.000,NULL,4),(7,5.000,'coffee',4),(8,233.000,'truffle',NULL);
 /*!40000 ALTER TABLE `budget` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -126,7 +126,7 @@ CREATE TABLE `event` (
 
 LOCK TABLES `event` WRITE;
 /*!40000 ALTER TABLE `event` DISABLE KEYS */;
-INSERT INTO `event` VALUES (1,1,'2020-10-05 14:00:00',NULL,'teach 104','array',0,3,NULL),(2,1,'2020-10-12 09:30:00',NULL,'teach 104','tree',0,3,NULL),(3,1,'2020-10-12 09:30:00',NULL,'starbucks','owe goodknee coffee',1,4,NULL),(4,2,'2020-10-02 16:00:00','2020-10-02 17:30:00','csci meeting','',2,1,NULL),(5,3,'2020-10-02 16:00:00','2020-10-02 17:30:00','csci meeting','new tree array',2,1,NULL),(6,4,'2020-10-02 21:00:00',NULL,'new starbucks','try new coffee',0,2,NULL);
+INSERT INTO `event` VALUES (1,1,'2020-10-05 14:00:00',NULL,'teach 104','array',0,3,NULL),(2,1,'2020-10-12 09:30:00',NULL,'teach 104','tree',0,3,NULL),(3,1,'2020-10-12 09:30:00',NULL,'starbucks','owe goodknee coffee',1,4,NULL),(4,2,'2020-10-02 16:00:00','2020-10-02 17:30:00','csci meeting','',2,1,NULL),(5,3,'2020-10-02 16:00:00','2020-10-02 17:30:00','csci meeting','new tree array',2,1,NULL),(6,4,'2020-10-02 20:00:00',NULL,'new starbucks','new coffee after meeting',0,2,NULL),(7,1,'2020-10-15 09:45:00',NULL,'moonbucks','payback goodknee',1,4,NULL),(8,2,'2020-10-16 19:00:00',NULL,'french cuisine',NULL,2,4,NULL);
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -184,7 +184,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'mark@usc.edu','redekopp','redekopp','Mark','Redekopp',34.0224,-118.2851),(2,'cote@gmail.com','cote','cote1234','Aaron','Cote',91,181),(3,'kempe@gmail.com','kempe','kempe123','David','Kempe',34.0224,-118.2851),(4,'goodknee','goodknee','goodknee','Andrew','Goodney',91,181),(11,'def1@usc.edu','username','password','Tommy','Trojan',34.0224,-118.2851),(12,'def2@usc.edu','username2','password2','Dummy','Trojan',1.3521,103.8198),(13,'def3@usc.edu','username3','password3','Gary','Gao',34.7466,113.6253);
+INSERT INTO `user` VALUES (1,'mark@usc.edu','redekopp','redekopp','Mark','Redekopp',34.0224,-118.2851),(2,'cote@gmail.com','cote','cote1234','Aaron','Cote',91,181),(3,'kempe@gmail.com','kempe','kempe123','David','Kempe',34.0224,-118.2851),(4,'goodknee@usc.edu','goodknee','goodknee','Andrew','Goodney',91,181),(11,'junit@test.com','junit','junit123','JunitFOne','JunitLOne',91,181),(21,'def1@usc.edu','username','password','Tommy','Trojan',34.0224,-118.2851),(22,'def2@usc.edu','username2','password2','Dummy','Trojan',1.3521,103.8198),(23,'def3@usc.edu','username3','password3','Gary','Gao',34.7466,113.6253);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -197,4 +197,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-13  0:10:38
+-- Dump completed on 2020-11-15 18:09:04

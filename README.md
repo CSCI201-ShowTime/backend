@@ -6,9 +6,11 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.4.4
-- Added `event/POST` for testing.
-  I have no idea what is working, and what is not working.
+Backend: v0.4.5
+- Merged Li's.
+- Fixed bug when using Hibernate `@Discriminator`.
+- Added repositories into `List`.
+- Added tests.
 
 Front-end: 778736c
 

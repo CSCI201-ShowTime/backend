@@ -47,7 +47,7 @@ public class Event {
     @NotNull
     private int visibility = 0;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", insertable = false, updatable = false, nullable = false)
     @NotNull
     private int type;
 

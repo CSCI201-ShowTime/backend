@@ -26,7 +26,6 @@ public class SpecEqualOneFrom<T> implements Specification<T> {
 
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        System.out.println(constraint.size());
         return constraint.size() > 0
                 ? criteriaBuilder.equal(root.get(field), constraint.get(0))
                 : null;
