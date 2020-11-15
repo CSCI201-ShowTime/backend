@@ -11,8 +11,6 @@ document.querySelector("form").onsubmit = function(event) {
 		let fname = $("#fname").val();
 		let lname = $("#lname").val();
 
-		// B (v0.2.6): disables encryption, causes unknown error, unable to fix atm
-		// Li (v0.2.6): encodes password before sending to server 
 		// Li (v0.4.5): add encodes password before sending to server again
 		let encoded = CryptoJS.MD5(password + "ShoWTimE").toString();
 
@@ -31,6 +29,7 @@ document.querySelector("form").onsubmit = function(event) {
 	    		email: email,
 	    		fname: fname,
 				lname: lname,
+				// Li(v0.4.5)
 	    		password: encoded
 			})
 		})
