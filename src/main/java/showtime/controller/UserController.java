@@ -63,6 +63,25 @@ public class UserController {
         }
     }
 
+    @GetMapping("/userid")
+    public int getCurrentUserid(Principal principal) {
+        Authentication authentication = (Authentication) principal;
+        // no credentials, perhaps missing Cookie?
+        if(authentication == null) {
+            return -1;
+        }
+
+        String email = principal.getName();
+        System.out.println(email);
+        Optional<User> userOpt = userRepo.findUserByEmail(email);
+        if(userOpt.isPresent()) {
+            return userOpt.get().getId();
+        }
+        else {
+            return -1;
+        }
+    }
+    
     /**
      * Responds to "/api/user.POST" requests. Registers a new user in the database.
      *

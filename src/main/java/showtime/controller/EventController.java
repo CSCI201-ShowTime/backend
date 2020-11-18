@@ -99,6 +99,10 @@ public class EventController {
                 specs.get(requestURI).get().fromMultiValueMap(params).build()
         );
 
+        if (eventList.size() > 10) {
+            eventList = eventList.subList(0, 10);
+        }
+        
         return new ResponseEntity<>(eventList, HttpStatus.OK);
 
 /*        if(requestURI.equals("/api/event/rawevent")) {

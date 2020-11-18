@@ -34,7 +34,7 @@ document.querySelector("form").onsubmit = function(event) {
 			})
 		})
 		.done(function( data, textStatus, jqXHR ) {
-			// B todo: login and redirect to timeline
+			window.location.href = "/login";
 		})
 		.fail(function( jqXHR, textStatus, errorThrown ) {
 			if (jqXHR.status == 409) {
