@@ -1,5 +1,6 @@
 package showtime.model;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import javax.persistence.Column;
@@ -13,13 +14,21 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = DurationEvent.class, name = "durationevent"),
+        @JsonSubTypes.Type(value = Reminder.class, name = "reminder"),
+        @JsonSubTypes.Type(value = Diary.class, name = "diary"),
+        @JsonSubTypes.Type(value = Budget.class, name = "budget")
+})
 @Entity
 @Table(name = "event")
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.INTEGER)
-public class Event {
+@DiscriminatorColumn(name = "type")
+public abstract class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,19 +55,20 @@ public class Event {
     private String description;
 
     @Column(name = "visibility", nullable = false)
-    @NotNull
     private int visibility = 0;
 
     @Column(name = "type", insertable = false, updatable = false, nullable = false)
     @NotNull
-    private int type;
+    private String type;
 
     @Column(name = "location")
     private String location;
 
-    public Event(@NotNull int userid, @NotNull LocalDateTime start, LocalDateTime end,
+    public Event(@NotNull int userid,
+                 @NotNull LocalDateTime start, LocalDateTime end,
                  @NotNull String title, String description,
-                 @NotNull int visibility, @NotNull int type, String location) {
+                 int visibility, @NotNull String type, String location) {
+        this.eventid = eventid;
         this.userid = userid;
         this.start = start;
         this.end = end;
@@ -143,11 +153,11 @@ public class Event {
         this.visibility = visibility;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 

@@ -1,5 +1,7 @@
 package showtime.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -10,10 +12,11 @@ import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+@JsonTypeName("4")
 @Entity
 @Table(name = "budget")
 @PrimaryKeyJoinColumn(name = "eventid")
-@DiscriminatorValue("4")
+@DiscriminatorValue("budget")
 public class Budget extends Event {
 
     @Column(name = "amount", nullable = false, columnDefinition="Decimal(11,3)")
@@ -30,7 +33,7 @@ public class Budget extends Event {
 
     public Budget(@NotNull int userid, @NotNull LocalDateTime start, LocalDateTime end,
                   @NotNull String title, String description,
-                  @NotNull int visibility, @NotNull int type, String location,
+                  @NotNull int visibility, @NotNull String type, String location,
                   @NotNull double amount, String category, Integer ebudTransactionUserid) {
         super(userid, start, end, title, description, visibility, type, location);
         this.amount = amount;

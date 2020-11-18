@@ -1,5 +1,7 @@
 package showtime.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -10,15 +12,16 @@ import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+@JsonTypeName("3")
 @Entity
 @Table(name = "diary")
 @PrimaryKeyJoinColumn(name = "eventid")
-@DiscriminatorValue("3")
+@DiscriminatorValue("diary")
 public class Diary extends Event {
 
     public Diary(@NotNull int userid, @NotNull LocalDateTime start, LocalDateTime end,
                  @NotNull String title, String description,
-                 @NotNull int visibility, @NotNull int type, String location) {
+                 @NotNull int visibility, @NotNull String type, String location) {
         super(userid, start, end, title, description, visibility, type, location);
     }
 

@@ -38,7 +38,7 @@ public class EventSpecBuilderTest {
                 .build();
 
         List<Event> event = eventRepo.findAll(spec);
-        assertEquals(3, event.size());
+        assertEquals(4, event.size());
         for(int i=0; i<3; i++) {
             assertEquals(1, event.get(i).getUserid());
         }
@@ -53,7 +53,7 @@ public class EventSpecBuilderTest {
                 .build();
 
         List<Event> event = eventRepo.findAll(spec);
-        assertEquals(3, event.size());
+        assertEquals(4, event.size());
         for(int i=0; i<3; i++) {
             assertEquals(1, event.get(i).getUserid());
         }
@@ -147,7 +147,7 @@ public class EventSpecBuilderTest {
     @Test
     void givenOneType_whenQuery_thenReturnMatch() {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
-        mvp.add("type", "3");
+        mvp.add("type", "diary");
         Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
@@ -155,15 +155,15 @@ public class EventSpecBuilderTest {
         List<Event> event = eventRepo.findAll(spec);
         assertEquals(2, event.size());
         for(int i=0; i<2; i++) {
-            assertEquals(3, event.get(i).getType());
+            assertEquals("diary", event.get(i).getType());
         }
     }
 
     @ParameterizedTest
-    @CsvSource({"3, 1, 2", "4, 1, 3"})
-    void givenMultipleType_whenQuery_thenReturnMatch(int expected, int input1, int input2) {
+    @CsvSource({"3, durationevent, reminder", "4, durationevent, diary"})
+    void givenMultipleType_whenQuery_thenReturnMatch(int expected, String input1, String input2) {
         MultiValueMap<String, String> mvp = new LinkedMultiValueMap<>();
-        mvp.addAll("type", List.of(Integer.toString(input1), Integer.toString(input2)));
+        mvp.addAll("type", List.of(input1, input2));
         Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();
@@ -185,7 +185,7 @@ public class EventSpecBuilderTest {
                 .build();
 
         List<Event> event = eventRepo.findAll(spec);
-        assertEquals(6, event.size());
+        assertEquals(8, event.size());
     }
 
     @Test
@@ -196,7 +196,7 @@ public class EventSpecBuilderTest {
         mvp.add("title", "teach 104");
         mvp.add("description", "array");
         mvp.add("visibility", "0");
-        mvp.addAll("type", List.of("1", "2", "3", "4"));
+        mvp.addAll("type", List.of("budget", "diary", "reminder", "durationevent"));
         Specification<Event> spec = new EventSpecBuilder<>()
                 .fromMultiValueMap(mvp)
                 .build();

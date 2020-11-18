@@ -125,12 +125,12 @@ public class EventSpecBuilder<T extends Event> {
     /**
      * Constrains type. Finds matches that matches any of the given type.
      */
-    public EventSpecBuilder<T> byType(int... type) {
+    public EventSpecBuilder<T> byType(String... type) {
         if(type.length > 0) {
             spec = spec.and(
                     (root, query, criteriaBuilder) -> {
                         List<Predicate> typePreds = new ArrayList<>();
-                        for(int each : type) {
+                        for(String each : type) {
                             typePreds.add( criteriaBuilder.equal(root.get("type"), each) );
                         }
                         return criteriaBuilder.or(typePreds.toArray(new Predicate[0]));
@@ -168,7 +168,7 @@ public class EventSpecBuilder<T extends Event> {
         byTitle( MVPUtil.toStringToArray(params.get("title")) );
         byDescription( MVPUtil.toStringToArray(params.get("description")) );
         byVisibility( MVPUtil.parseIntToArray(params.get("visibility")) );
-        byType( MVPUtil.parseIntToArray(params.get("type")) );
+        byType( MVPUtil.toStringToArray(params.get("type")) );
         byLocation( MVPUtil.toStringToArray(params.get("location")) );
         return this;
     }

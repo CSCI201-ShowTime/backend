@@ -69,7 +69,7 @@ class RawtypeRepoSpecPolymorphicTest {
                 null,
                 "test diary1",
                 "test diary description 1",
-                0, 3,
+                0, "diary",
                 null
         );
         budget = new Budget(11,
@@ -77,7 +77,7 @@ class RawtypeRepoSpecPolymorphicTest {
                 null,
                 "test budget1",
                 "test budget description 1",
-                0, 3,
+                0, "budget",
                 null,
                 -199801.01,
                 "inferior goods",

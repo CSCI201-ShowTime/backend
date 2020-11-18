@@ -40,6 +40,29 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+/*
+As of current, Jackson is unable to automatically deserialize JSON into
+polymorphic entities. The workarounds are:
+
+1. Assign a different Controller for each polymorphic entity type
++ validation and implementation is the easiest
+- duplicated code and violation of OOP
+
+2. Read raw JSON strings into the Controller and deserialize based on type
++ information is directly available in the Controller,
+  validation and logic can be implemented easily
+- Spring's existing functionalities are ignored
+
+3. Customize Jackson's JSONDeserializer and annotations
++ Spring's existing functionalities are utilized
+- Many separated DTOs may be required. e.g. If using @JsonTypeInfo,
+  a "type" information will be required for all JSON,
+  but polymorphism is required for POST not PUT
+
+4. Intercept the request before it reaches the Controller
++ Spring's existing functionalities are utilized
+- Complicated code. JSON validation logic is spread among classes.
+ */
 @RestController
 @RequestMapping("/api/event")
 public class EventController {
@@ -142,7 +165,16 @@ public class EventController {
         }*/
     }
 
-    // TODO: Polymorphic behavior
+/*    @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
+    public ResponseEntity<Event> createEventTest(
+            HttpServletRequest request,
+            @RequestBody Event event
+    ) {
+        logger.debug("Request to /rawevent/test/POST with RequestBody=" + event);
+        Event saved = (Event) repos.get(request.getRequestURI()).save(event);
+
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
+    }*/
 
     @PostMapping("/durationevent")
     public ResponseEntity<DurationEvent> createDurationEvent(@RequestBody DurationEvent dEvent) {
@@ -171,37 +203,6 @@ public class EventController {
         Budget saved = (Budget) repos.get("/api/event/budget").save(budget);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
-
-/*    @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
-    public ResponseEntity<Event> createEvent(
-            HttpServletRequest request,
-            @RequestBody Event event) {
-
-        // "/api/event/rawevent"
-        String requestURI = request.getRequestURI();
-
-        //Event savedEvent = (Event) repos.get(requestURI).save(event);
-
-*//*        Event savedEvent = null;
-        if(requestURI.equals("/api/event/durationevent")) {
-            DurationEvent durationEvent = (DurationEvent) event;
-            savedEvent = durationEventRepo.save(durationEvent);
-        }
-        else if(requestURI.equals("/api/event/reminder")) {
-            Reminder reminder = (Reminder) event;
-            savedEvent = reminderRepo.save(reminder);
-        }
-        else if(requestURI.equals("/api/event/diary")) {
-            Diary diary = (Diary) event;
-            savedEvent = diaryRepo.save(diary);
-        }
-        else if(requestURI.equals("/api/event/budget")) {
-            Budget budget = (Budget) event;
-            savedEvent = budgetRepo.save(budget);
-        }*//*
-
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
-    }*/
 
     @PutMapping("/durationevent")
     public ResponseEntity<DurationEvent> updateDurationEvent(@RequestBody DurationEvent dEvent) {

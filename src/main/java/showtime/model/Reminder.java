@@ -1,5 +1,7 @@
 package showtime.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorValue;
@@ -8,10 +10,11 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+@JsonTypeName("2")
 @Entity
 @Table(name = "reminder")
 @PrimaryKeyJoinColumn(name = "eventid")
-@DiscriminatorValue("2")
+@DiscriminatorValue("reminder")
 public class Reminder extends Event {
 
     @Column(name = "remind_time")

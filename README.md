@@ -6,13 +6,10 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.5.1 RAVIOLI
-- Good news: Everything works.
-- Bad news: beetles, fireflies, caterpillars, centipedes, everything has bugs.
-  Everything is copy-pasted, hard-coded, and nothing is OOP.
-  If not because he has finals, just fire the guy who wrote the backend.
-- Fixed not creating a new `EventSpecBuilder` each time when calling `event/GET`.
-- Added sample code for `budget.html`.
+Backend: v0.6.1 TORTELLI
+- Updated sql file.
+- Changed Event type from `int` to `String`.
+- Dropped `static`. Please download from `front-end` instead.
 
 Known issues
 - When creating a new `Event`, even when sent to a specific URI, 
