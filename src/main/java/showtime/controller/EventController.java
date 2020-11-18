@@ -165,18 +165,20 @@ public class EventController {
         }*/
     }
 
-/*    @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
+    @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
     public ResponseEntity<Event> createEventTest(
             HttpServletRequest request,
-            @RequestBody Event event
-    ) {
-        logger.debug("Request to /rawevent/test/POST with RequestBody=" + event);
-        Event saved = (Event) repos.get(request.getRequestURI()).save(event);
+            @RequestBody Event event) {
 
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
-    }*/
+        String requestURI = request.getRequestURI();
 
-    @PostMapping("/durationevent")
+        logger.debug("Request to " + requestURI + "/POST with RequestBody=" + event);
+        // because of auto increment, no duplicates will exist
+        Event saved = (Event) repos.get(requestURI).save(event);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+/*    @PostMapping("/durationevent")
     public ResponseEntity<DurationEvent> createDurationEvent(@RequestBody DurationEvent dEvent) {
 
         DurationEvent saved = (DurationEvent) repos.get("/api/event/durationevent").save(dEvent);
@@ -202,7 +204,7 @@ public class EventController {
 
         Budget saved = (Budget) repos.get("/api/event/budget").save(budget);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
-    }
+    }*/
 
     @PutMapping("/durationevent")
     public ResponseEntity<DurationEvent> updateDurationEvent(@RequestBody DurationEvent dEvent) {

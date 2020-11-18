@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = DurationEvent.class, name = "durationevent"),
         @JsonSubTypes.Type(value = Reminder.class, name = "reminder"),

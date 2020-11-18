@@ -6,10 +6,8 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.6.1 TORTELLI
-- Updated sql file.
-- Changed Event type from `int` to `String`.
-- Dropped `static`. Please download from `front-end` instead.
+Backend: v0.6.2 TORTELLI
+- Added polymorphic behavior when `event/POST`. Requires additional testing.
 
 Known issues
 - When creating a new `Event`, even when sent to a specific URI, 
@@ -20,32 +18,16 @@ Known issues
 - `event/POST` has undergone very basic testing.
 - Security is temporarily disabled.
 
-Front-end: 778736c
-
 #### General Instructions
-1. Import MySQL database from `showtime.sql` file.
+1. Import MySQL database from `showtime_wevent_20201118.sql` file.
 2. Open Java project.
 3. Add Maven support if needed.
 4. Verify database port, username, and password in `src/main/resources/application.properties`.
-5. HTML/ CSS/ Javascript files are included.
-   To use another copy, replace the files in `src/main/resources/static`.
-   (Warning: `src/main/resources/static/js/server` includes server-client communication logic.)
+5. Place front-end files in `src/main/resources/static`.
+   (Warning: `src/main/resources/static/js/server` may include server-client communication files.)
 
 For detailed instructions, check instructions for Demo on 
 [Confluence](https://201fptesting3.atlassian.net/wiki/spaces/DOC/pages/229779/Demo+Installation+Guide).
 
 #### Version Specific Instructions
-`login.html`
-- Integrated `server/login-server.js` in `login.js`. 
-  May separate at later date to decouple front-end and backend.
-- Updated `AJAX` call in js.
-
-`register.html`
-- Updated `AJAX` call in js. May separate.
-
-`account_page.html`
-- Included `server/logout-server.js` and `server/logout-navbar-temp.js`.
-  `server/logout-navbar-temp.js` should be integrated by front-end as fit.
-  
-`budget.html`
-- Added sample code and `sample/budget-query-category.js`.
+- None.
