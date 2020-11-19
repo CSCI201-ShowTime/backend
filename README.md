@@ -6,8 +6,10 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.6.2 TORTELLI
-- Added polymorphic behavior when `event/POST`. Requires additional testing.
+Backend: v0.6.5 TORTELLI
+- Added polymorphic behavior when `event/PUT`.
+- Fixed issue in `ReminderSpecBuilder` where `remind_time` does not match `remindTime`.
+- Prettied error message in `EventJsonPostPutAdvice`.
 
 Known issues
 - When creating a new `Event`, even when sent to a specific URI, 

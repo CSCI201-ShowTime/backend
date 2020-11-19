@@ -2,6 +2,7 @@ package showtime.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import showtime.service.EventUpdateService;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -80,6 +81,14 @@ public abstract class Event {
     }
 
     public Event() {
+    }
+
+    /**
+     * Allows an external helper service to modify the contents of the
+     * current {@code Event} given another {@code Event}.
+     */
+    public void accept(EventUpdateService eventUpdateSvc, Event update) {
+        eventUpdateSvc.visit(this, update);
     }
 
     @Override

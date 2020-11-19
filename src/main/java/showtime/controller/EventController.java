@@ -4,8 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
@@ -17,10 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import showtime.model.Budget;
-import showtime.model.Diary;
-import showtime.model.DurationEvent;
 import showtime.model.Event;
-import showtime.model.Reminder;
 import showtime.repository.BudgetRepository;
 import showtime.repository.DiaryRepository;
 import showtime.repository.DurationEventRepository;
@@ -31,10 +29,10 @@ import showtime.service.BudgetSpecBuilder;
 import showtime.service.DiarySpecBuilder;
 import showtime.service.DurationEventSpecBuilder;
 import showtime.service.EventSpecBuilder;
+import showtime.service.EventUpdateService;
 import showtime.service.ReminderSpecBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +69,7 @@ public class EventController {
 
     Logger logger = LoggerFactory.getLogger(EventController.class);
 
-    @Autowired
+/*    @Autowired
     private EventRepository eventRepo;
     @Autowired
     private DurationEventRepository durationEventRepo;
@@ -81,12 +79,17 @@ public class EventController {
     private DiaryRepository diaryRepo;
     @Autowired
     private BudgetRepository budgetRepo;
+    @Autowired
+    private EventRepoSpecService eventSvc;*/
 
     // Because of constraint on JpaSpecificationExecutor, currently used as raw type
     @SuppressWarnings("rawtypes")
     private final Map<String, EventBaseRepository> repos;
     @SuppressWarnings("rawtypes")
     private final Map<String, Supplier<EventSpecBuilder>> specs;
+
+    @Autowired
+    private EventUpdateService eventUpdateSvc;
 
     @Autowired
     public EventController(EventRepository er,
@@ -111,20 +114,31 @@ public class EventController {
 
     // TODO: Security checks
 
+    // TODO: Exception Handling
+    /**
+     * Responds to "/api/event/GET" requests. Retrieves {@link Event} or subclasses
+     * from the database. Supports dynamic creation of queries backed by
+     * {@code Specification} by including corresponding fields and values in the
+     * request URL. Also supports paging, using the URL parameters
+     * {@code sort=field,asc/desc}, {@code page=?} and {@code size=?}.
+     */
     @GetMapping({"/rawevent", "/durationevent", "/reminder", "/diary", "/budget"})
     public ResponseEntity<?> getEventByCriteria(
             HttpServletRequest request,
-            @RequestParam MultiValueMap<String, String> params) {
+            @RequestParam MultiValueMap<String, String> params,
+            @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable) {
 
         // "/api/event/rawevent"
         String requestURI = request.getRequestURI();
+        logger.debug(requestURI);
 
         @SuppressWarnings("unchecked")
-        List<Event> eventList = repos.get(requestURI).findAll(
-                specs.get(requestURI).get().fromMultiValueMap(params).build()
+        Slice<Event> eventList = repos.get(requestURI).findAll(
+                specs.get(requestURI).get().fromMultiValueMap(params).build(),
+                pageable
         );
-        
-        return new ResponseEntity<>(eventList, HttpStatus.OK);
+
+        return new ResponseEntity<>(eventList.getContent(), HttpStatus.OK);
     }
     
     @GetMapping({"/topEvent"})
@@ -161,118 +175,42 @@ public class EventController {
 
         return new ResponseEntity<>(eventList, HttpStatus.OK);
     }
-    
-    @PostMapping("/durationevent")
-    public ResponseEntity<DurationEvent> createDurationEvent(@RequestBody DurationEvent dEvent) {
 
-        DurationEvent saved = (DurationEvent) repos.get("/api/event/durationevent").save(dEvent);
+    /**
+     * Responds to "/api/event/POST" requests. Creates a new {@link Event} in the database.
+     */
+    @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
+    public ResponseEntity<Event> createEventTest(HttpServletRequest request, @RequestBody Event event) {
+
+        String requestURI = request.getRequestURI();
+        logger.debug("Request POST to " + requestURI + " with RequestBody=" + event);
+
+        // because of auto increment, no duplicates will exist
+        Event saved = (Event) repos.get(requestURI).save(event);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    @PostMapping("/reminder")
-    public ResponseEntity<Reminder> createReminder(@RequestBody Reminder reminder) {
-    	System.out.println(reminder.toString());
-        Reminder saved = (Reminder) repos.get("/api/event/reminder").save(reminder);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
-    }
+    /**
+     * Responds to "/api/event/PUT" requests. Updates an existing {@link Event}
+     * in the database.
+     */
+    @PutMapping({"/durationevent", "/reminder", "/diary", "/budget"})
+    public ResponseEntity<? extends Event> updateBudget(HttpServletRequest request, @RequestBody Event event) {
 
-    @PostMapping("/diary")
-    public ResponseEntity<Diary> createDiary(@RequestBody Diary diary) {
-    	System.out.println(diary.toString());
-        Diary saved = (Diary) repos.get("/api/event/diary").save(diary);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
-    }
+        String requestURI = request.getRequestURI();
+        logger.debug("Request PUT to " + requestURI + "with RequestBody=" + event);
 
-    @PostMapping("/budget")
-    public ResponseEntity<Budget> createBudget(@RequestBody Budget budget) {
+        @SuppressWarnings("unchecked")
+        Optional<Event> eventO = repos.get(requestURI).findById(event.getEventid());
 
-        Budget saved = (Budget) repos.get("/api/event/budget").save(budget);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/durationevent")
-    public ResponseEntity<DurationEvent> updateDurationEvent(@RequestBody DurationEvent dEvent) {
-
-        Optional<DurationEvent> found = repos.get("/api/event/durationevent").findById(dEvent.getEventid());
-        if(found.isPresent()) {
-            DurationEvent original = found.get();
-            original.setStart(dEvent.getStart());
-            original.setEnd(dEvent.getEnd());
-            original.setTitle(dEvent.getTitle());
-            original.setDescription(dEvent.getDescription());
-            original.setVisibility(dEvent.getVisibility());
-            original.setLocation(dEvent.getLocation());
-            original.setRemindTime(dEvent.getRemindTime());
-
-            DurationEvent saved = (DurationEvent) repos.get("/api/event/durationevent").save(original);
-
-            return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        if(eventO.isPresent()) {
+            Event eventGet = eventO.get();
+            eventGet.accept(eventUpdateSvc, event);
+            Event eventUpdate = (Event) repos.get(requestURI).save(eventGet);
+            return new ResponseEntity<>(eventUpdate, HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
-
-    @PutMapping("/reminder")
-    public ResponseEntity<Reminder> updateReminder(@RequestBody Reminder reminder) {
-
-        Optional<Reminder> found = repos.get("/api/event/reminder").findById(reminder.getEventid());
-        if(found.isPresent()) {
-            Reminder original = found.get();
-            original.setStart(reminder.getStart());
-            original.setEnd(reminder.getEnd());
-            original.setTitle(reminder.getTitle());
-            original.setDescription(reminder.getDescription());
-            original.setVisibility(reminder.getVisibility());
-            original.setLocation(reminder.getLocation());
-            original.setRemindTime(reminder.getRemindTime());
-            original.setPriority(reminder.getPriority());
-
-            Reminder saved = (Reminder) repos.get("/api/event/reminder").save(original);
-
-            return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
-
-    @PutMapping("/diary")
-    public ResponseEntity<Diary> updateDiary(@RequestBody Diary diary) {
-
-        Optional<Diary> found = repos.get("/api/event/diary").findById(diary.getEventid());
-        if(found.isPresent()) {
-            Diary original = found.get();
-            original.setStart(diary.getStart());
-            original.setEnd(diary.getEnd());
-            original.setTitle(diary.getTitle());
-            original.setDescription(diary.getDescription());
-            original.setVisibility(diary.getVisibility());
-            original.setLocation(diary.getLocation());
-
-            Diary saved = (Diary) repos.get("/api/event/diary").save(original);
-
-            return new ResponseEntity<>(saved, HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
-
-    @PutMapping("/budget")
-    public ResponseEntity<Budget> updateBudget(@RequestBody Budget budget) {
-
-        Optional<Budget> found = repos.get("/api/event/budget").findById(budget.getEventid());
-        if(found.isPresent()) {
-            Budget original = found.get();
-            original.setStart(budget.getStart());
-            original.setEnd(budget.getEnd());
-            original.setTitle(budget.getTitle());
-            original.setDescription(budget.getDescription());
-            original.setVisibility(budget.getVisibility());
-            original.setLocation(budget.getLocation());
-            original.setAmount(budget.getAmount());
-            original.setCategory(budget.getCategory());
-            original.setEbudTransactionUserid(budget.getEbudTransactionUserid());
-
-            Budget saved = (Budget) repos.get("/api/event/budget").save(original);
-
-            return new ResponseEntity<>(saved, HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }

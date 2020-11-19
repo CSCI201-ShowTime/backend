@@ -69,31 +69,34 @@ public class EventJsonPostPutAdvice extends RequestBodyAdviceAdapter {
      */
     private String validateType(InputStream input) throws IOException {
 
-        String urlType = req.getRequestURI().replaceFirst("/api/event/", "");
+        String urlType = req.getRequestURI()
+                .replaceFirst("/api/event/", "")
+                // second replace may not be necessary, it does not show /POST /PUT etc.
+                .replaceFirst("\\/.*", "");
 
         BufferedReader br = new BufferedReader(new InputStreamReader(input));
         String json = br.lines().collect(Collectors.joining("\n"));
         Matcher matcher = pattern.matcher(json);
         if(matcher.find()) {
-            logger.debug("Type is found in JSON");
             // matches literally "type": xyz ,
             String jsonType = matcher.group();
             // removes "type":
             String stripJsonType = prefix.matcher(jsonType).replaceFirst("");
-            // removes , or } and spaces
+            // removes , or }, then spaces
             stripJsonType = stripJsonType.substring(0, stripJsonType.length()-1).trim();
-            // removes " "
+            // removes " and "
             stripJsonType = stripJsonType.substring(1, stripJsonType.length()-1);
 
             if(!stripJsonType.equals(urlType)) {
-                logger.debug("Type mismatch in JSON, expected=" + urlType + ", found=" + stripJsonType);
+                String errMsg = "Request to " + req.getRequestURI() + " has JSON type mismatch, found=" + stripJsonType;
+                logger.debug(errMsg);
                 // wtf? deprecated?
-                throw new JsonMappingException(
-                        "JSON type mismatch with requested URI, expected=" + urlType + ", found=" + stripJsonType);
+                throw new JsonMappingException(errMsg);
             }
+            logger.debug("Request to " + req.getRequestURI() + " has JSON type match");
         }
         else {
-            logger.debug("Type is NOT found in JSON");
+            logger.debug("Request to " + req.getRequestURI() + " has JSON type NOT found");
             json = json.substring(0, json.length()-1).concat(",\"type\":" + urlType + "}");
         }
 

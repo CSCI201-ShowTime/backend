@@ -23,13 +23,13 @@ public class ReminderSpecBuilder extends EventSpecBuilder<Reminder> {
         if(remindTime.length >= 2) {
             spec = spec.and(
                     (root, query, criteriaBuilder) ->
-                            criteriaBuilder.between(root.get("remind_time"), remindTime[0], remindTime[1])
+                            criteriaBuilder.between(root.get("remindTime"), remindTime[0], remindTime[1])
             );
         }
         else if(remindTime.length >= 1) {
             spec = spec.and(
                     (root, query, criteriaBuilder) ->
-                            criteriaBuilder.equal(root.get("remind_time"), remindTime[0])
+                            criteriaBuilder.equal(root.get("remindTime"), remindTime[0])
             );
         }
         return this;
@@ -49,7 +49,7 @@ public class ReminderSpecBuilder extends EventSpecBuilder<Reminder> {
     @Override
     public ReminderSpecBuilder fromMultiValueMap(MultiValueMap<String, String> params) {
         super.fromMultiValueMap(params);
-        byRemindTime( MVPUtil.parseDateTimeToArray(params.get("remindtime")) );
+        byRemindTime( MVPUtil.parseDateTimeToArray(params.get("remind_time")) );
         byPriority( MVPUtil.parseIntToArray(params.get("priority")) );
         return this;
     }

@@ -2,6 +2,7 @@ package showtime.model;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import showtime.service.EventUpdateService;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -30,6 +31,14 @@ public class DurationEvent extends Event {
     }
 
     public DurationEvent() {
+    }
+
+    /**
+     * Allows an external helper service to modify the contents of the
+     * current {@code Event} given another {@code Event}.
+     */
+    public void accept(EventUpdateService eventUpdateSvc, Event update) {
+        eventUpdateSvc.visit(this, update);
     }
 
     @Override

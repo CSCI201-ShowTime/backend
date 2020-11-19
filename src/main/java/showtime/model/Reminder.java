@@ -2,6 +2,7 @@ package showtime.model;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import showtime.service.EventUpdateService;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -27,6 +28,14 @@ public class Reminder extends Event {
     public Reminder() {
     }
 
+    /**
+     * Allows an external helper service to modify the contents of the
+     * current {@code Event} given another {@code Event}.
+     */
+    public void accept(EventUpdateService eventUpdateSvc, Event update) {
+        eventUpdateSvc.visit(this, update);
+    }
+
     @Override
     public String toString() {
         return "Reminder{" +
@@ -41,6 +50,7 @@ public class Reminder extends Event {
     
     // v0.6.4 Zhian Li: Must use explicit JsonSetter
     // Who defined remind_time and remindTime differently?!!!
+    // v0.6.5 BK: \(ツ)/
     @JsonSetter("remind_time")
     public void setRemindTime(LocalDateTime remind_time) {
         this.remindTime = remind_time;

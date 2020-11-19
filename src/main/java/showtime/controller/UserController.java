@@ -100,6 +100,7 @@ public class UserController {
             return "";
         }
     }
+
     /**
      * Responds to "/api/user.POST" requests. Registers a new user in the database.
      *

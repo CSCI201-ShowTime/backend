@@ -6,5 +6,5 @@ import showtime.model.Budget;
 
 import java.util.List;
 
-public interface BudgetRepository extends EventBaseRepository<Budget> {
+public interface BudgetRepository extends EventBaseRepository<Budget>, JpaSpecificationExecutor<Budget> {
 }
