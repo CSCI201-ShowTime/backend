@@ -72,7 +72,7 @@ public class UserController {
         }
 
         String email = principal.getName();
-        System.out.println(email);
+        //System.out.println(email);
         Optional<User> userOpt = userRepo.findUserByEmail(email);
         if(userOpt.isPresent()) {
             return userOpt.get().getId();
@@ -82,6 +82,24 @@ public class UserController {
         }
     }
     
+    @GetMapping("/username")
+    public String getCurrentUserName(Principal principal) {
+        Authentication authentication = (Authentication) principal;
+        // no credentials, perhaps missing Cookie?
+        if(authentication == null) {
+            return "";
+        }
+
+        String email = principal.getName();
+        System.out.println(email);
+        Optional<User> userOpt = userRepo.findUserByEmail(email);
+        if(userOpt.isPresent()) {
+            return userOpt.get().getUsername();
+        }
+        else {
+            return "";
+        }
+    }
     /**
      * Responds to "/api/user.POST" requests. Registers a new user in the database.
      *

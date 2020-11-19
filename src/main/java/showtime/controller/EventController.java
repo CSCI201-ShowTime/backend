@@ -165,6 +165,41 @@ public class EventController {
         }*/
     }
 
+    @GetMapping({"/topEvent"})
+    public ResponseEntity<?> getTop10EventByCriteria(
+            HttpServletRequest request,
+            @RequestParam MultiValueMap<String, String> params) {
+        // userid = 101, 
+        // userid != 101, visibility 
+        // "/api/event/rawevent"
+        String requestURI = request.getRequestURI();
+        
+        // Reminder Test
+        if (requestURI.equals("/api/event/reminder")) {
+            //List<Reminder> reminderList = reminderRepo.readTop3ByOrderByPriorityDesc();
+            //return new ResponseEntity<>(reminderList, HttpStatus.OK);
+        }
+        
+        
+        List<String> repoURIs = Arrays.asList("/api/event/durationevent", "/api/event/diary", "/api/event/budget");
+        @SuppressWarnings("unchecked")
+        List<Event> eventList = repos.get("/api/event/reminder").findAll(
+                specs.get("/api/event/reminder").get().fromMultiValueMap(params).build()
+                ,Sort.by(Sort.Direction.ASC, "start")
+        );
+        for (String repoURI : repoURIs) {
+            @SuppressWarnings("unchecked")
+            List<Event> childEventList = repos.get(repoURI).findAll(
+                   specs.get(repoURI).get().fromMultiValueMap(params).build()
+                   ,Sort.by(Sort.Direction.ASC, "start")
+            );
+            eventList.addAll(childEventList);
+        }
+        
+
+        return new ResponseEntity<>(eventList, HttpStatus.OK);
+    }
+    
     @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
     public ResponseEntity<Event> createEventTest(
             HttpServletRequest request,

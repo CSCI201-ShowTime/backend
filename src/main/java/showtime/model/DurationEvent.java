@@ -1,5 +1,6 @@
 package showtime.model;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.Column;
@@ -41,7 +42,8 @@ public class DurationEvent extends Event {
     public LocalDateTime getRemindTime() {
         return remindTime;
     }
-
+    
+    @JsonSetter("remind_time")
     public void setRemindTime(LocalDateTime remind_time) {
         this.remindTime = remind_time;
     }
