@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,7 @@ import showtime.service.ReminderSpecBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,64 +123,24 @@ public class EventController {
         List<Event> eventList = repos.get(requestURI).findAll(
                 specs.get(requestURI).get().fromMultiValueMap(params).build()
         );
-
-        if (eventList.size() > 10) {
-            eventList = eventList.subList(0, 10);
-        }
         
         return new ResponseEntity<>(eventList, HttpStatus.OK);
-
-/*        if(requestURI.equals("/api/event/rawevent")) {
-            Specification<Event> specRawEvent = new EventSpecBuilderService<>()
-                    .fromMultiValueMap(params)
-                    .build();
-            List<? extends Event> eventList = eventRepo.findAll(specRawEvent);
-            return new ResponseEntity<>(eventList, HttpStatus.OK);
-        }
-        else if(requestURI.equals("/api/event/durationevent")) {
-            Specification<DurationEvent> specDurationEvent = new DurationEventSpecBuilderService()
-                    .fromMultiValueMap(params)
-                    .build();
-            List<DurationEvent> eventList = durationEventRepo.findAll(specDurationEvent);
-            return new ResponseEntity<>(eventList, HttpStatus.OK);
-        }
-        else if(requestURI.equals("/api/event/reminder")) {
-            Specification<Reminder> specReminder = new ReminderSpecBuilderService()
-                    .fromMultiValueMap(params)
-                    .build();
-            List<Reminder> eventList = reminderRepo.findAll(specReminder);
-            return new ResponseEntity<>(eventList, HttpStatus.OK);
-        }
-        else if(requestURI.equals("/api/event/diary")) {
-            Specification<Diary> specDiary = new DiarySpecBuilderService()
-                    .fromMultiValueMap(params)
-                    .build();
-            List<Diary> eventList = diaryRepo.findAll(specDiary);
-            return new ResponseEntity<>(eventList, HttpStatus.OK);
-        }
-        else if(requestURI.equals("/api/event/budget")) {
-            Specification<Budget> specBudget = new BudgetSpecBuilderService()
-                    .fromMultiValueMap(params)
-                    .build();
-            List<Budget> eventList = budgetRepo.findAll(specBudget);
-            return new ResponseEntity<>(eventList, HttpStatus.OK);
-        }*/
     }
-
+    
     @GetMapping({"/topEvent"})
     public ResponseEntity<?> getTop10EventByCriteria(
             HttpServletRequest request,
             @RequestParam MultiValueMap<String, String> params) {
-        // userid = 101, 
-        // userid != 101, visibility 
+    	// userid = 101, 
+    	// userid != 101, visibility 
         // "/api/event/rawevent"
         String requestURI = request.getRequestURI();
         
         // Reminder Test
         if (requestURI.equals("/api/event/reminder")) {
-            //List<Reminder> reminderList = reminderRepo.readTop3ByOrderByPriorityDesc();
-            //return new ResponseEntity<>(reminderList, HttpStatus.OK);
-        }
+    		//List<Reminder> reminderList = reminderRepo.readTop3ByOrderByPriorityDesc();
+    		//return new ResponseEntity<>(reminderList, HttpStatus.OK);
+    	}
         
         
         List<String> repoURIs = Arrays.asList("/api/event/durationevent", "/api/event/diary", "/api/event/budget");
@@ -188,32 +150,19 @@ public class EventController {
                 ,Sort.by(Sort.Direction.ASC, "start")
         );
         for (String repoURI : repoURIs) {
-            @SuppressWarnings("unchecked")
-            List<Event> childEventList = repos.get(repoURI).findAll(
+        	@SuppressWarnings("unchecked")
+        	List<Event> childEventList = repos.get(repoURI).findAll(
                    specs.get(repoURI).get().fromMultiValueMap(params).build()
                    ,Sort.by(Sort.Direction.ASC, "start")
             );
-            eventList.addAll(childEventList);
+        	eventList.addAll(childEventList);
         }
         
 
         return new ResponseEntity<>(eventList, HttpStatus.OK);
     }
     
-    @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
-    public ResponseEntity<Event> createEventTest(
-            HttpServletRequest request,
-            @RequestBody Event event) {
-
-        String requestURI = request.getRequestURI();
-
-        logger.debug("Request to " + requestURI + "/POST with RequestBody=" + event);
-        // because of auto increment, no duplicates will exist
-        Event saved = (Event) repos.get(requestURI).save(event);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
-    }
-
-/*    @PostMapping("/durationevent")
+    @PostMapping("/durationevent")
     public ResponseEntity<DurationEvent> createDurationEvent(@RequestBody DurationEvent dEvent) {
 
         DurationEvent saved = (DurationEvent) repos.get("/api/event/durationevent").save(dEvent);
@@ -222,14 +171,14 @@ public class EventController {
 
     @PostMapping("/reminder")
     public ResponseEntity<Reminder> createReminder(@RequestBody Reminder reminder) {
-
+    	System.out.println(reminder.toString());
         Reminder saved = (Reminder) repos.get("/api/event/reminder").save(reminder);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @PostMapping("/diary")
     public ResponseEntity<Diary> createDiary(@RequestBody Diary diary) {
-
+    	System.out.println(diary.toString());
         Diary saved = (Diary) repos.get("/api/event/diary").save(diary);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
@@ -239,7 +188,7 @@ public class EventController {
 
         Budget saved = (Budget) repos.get("/api/event/budget").save(budget);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
-    }*/
+    }
 
     @PutMapping("/durationevent")
     public ResponseEntity<DurationEvent> updateDurationEvent(@RequestBody DurationEvent dEvent) {
