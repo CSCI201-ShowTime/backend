@@ -39,6 +39,8 @@ public class Reminder extends Event {
         return remindTime;
     }
     
+    // v0.6.4 Zhian Li: Must use explicit JsonSetter
+    // Who defined remind_time and remindTime differently?!!!
     @JsonSetter("remind_time")
     public void setRemindTime(LocalDateTime remind_time) {
         this.remindTime = remind_time;
