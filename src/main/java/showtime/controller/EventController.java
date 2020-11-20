@@ -72,7 +72,7 @@ polymorphic entities. The workarounds are:
 @RequestMapping("/api/event")
 public class EventController {
 
-    Logger logger = LoggerFactory.getLogger(EventController.class);
+    private static final Logger logger = LoggerFactory.getLogger(EventController.class);
 
 /*    @Autowired
     private EventRepository eventRepo;
@@ -218,35 +218,6 @@ public class EventController {
         // System.out.println(event.toString());
         // because of auto increment, no duplicates will exist
         Event saved = (Event) repos.get(requestURI).save(event);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
-    }
-    
-    
-    /*
-    @PostMapping("/durationevent")
-    public ResponseEntity<DurationEvent> createDurationEvent(@RequestBody DurationEvent dEvent) {
-        DurationEvent saved = (DurationEvent) repos.get("/api/event/durationevent").save(dEvent);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/reminder")
-    public ResponseEntity<Reminder> createReminder(@RequestBody Reminder reminder) {
-    	System.out.println(reminder.toString());
-        Reminder saved = (Reminder) repos.get("/api/event/reminder").save(reminder);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/diary")
-    public ResponseEntity<Diary> createDiary(@RequestBody Diary diary) {
-    	System.out.println(diary.toString());
-        Diary saved = (Diary) repos.get("/api/event/diary").save(diary);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/budget")
-    public ResponseEntity<Budget> createBudget(@RequestBody Budget budget) {
-
-        Budget saved = (Budget) repos.get("/api/event/budget").save(budget);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 	

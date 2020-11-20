@@ -5,11 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonInputMessage;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
@@ -33,10 +35,12 @@ import java.util.stream.Collectors;
 @ControllerAdvice(assignableTypes = {EventController.class})
 public class EventJsonPostPutAdvice extends RequestBodyAdviceAdapter {
 
-    Logger logger = LoggerFactory.getLogger(EventJsonPostPutAdvice.class);
+    private static final Logger logger = LoggerFactory.getLogger(EventJsonPostPutAdvice.class);
 
-    private static final Pattern pattern = Pattern.compile("\"type\"\\s*:\\s*.*?[,}]");
-    private static final Pattern prefix = Pattern.compile("\"type\"\\s*:\\s*");
+    // https://stackoverflow.com/questions/22444/my-regex-is-matching-too-much-how-do-i-make-it-stop
+
+    private static final Pattern jsonPat = Pattern.compile("\"type\"\\s*:\\s*\"(.*?)\"[,}]");
+    private static final Pattern uriPat = Pattern.compile("\\/api\\/event\\/(.*?)(?:\\/|$)");
 
     @Autowired
     private HttpServletRequest req;
@@ -69,35 +73,30 @@ public class EventJsonPostPutAdvice extends RequestBodyAdviceAdapter {
      */
     private String validateType(InputStream input) throws IOException {
 
-        String urlType = req.getRequestURI()
-                .replaceFirst("/api/event/", "")
-                // second replace may not be necessary, it does not show /POST /PUT etc.
-                .replaceFirst("\\/.*", "");
+        String uriType = "";
+        Matcher uriMatcher = uriPat.matcher(req.getRequestURI());
+        if(uriMatcher.find()) {
+            uriType = uriMatcher.group(1);
+        }
 
         BufferedReader br = new BufferedReader(new InputStreamReader(input));
         String json = br.lines().collect(Collectors.joining("\n"));
-        Matcher matcher = pattern.matcher(json);
+        Matcher matcher = jsonPat.matcher(json);
         if(matcher.find()) {
-            // matches literally "type": xyz ,
-            String jsonType = matcher.group();
-            // removes "type":
-            String stripJsonType = prefix.matcher(jsonType).replaceFirst("");
-            // removes , or }, then spaces
-            stripJsonType = stripJsonType.substring(0, stripJsonType.length()-1).trim();
-            // removes " and "
-            stripJsonType = stripJsonType.substring(1, stripJsonType.length()-1);
+            String jsonType = matcher.group(1);
 
-            if(!stripJsonType.equals(urlType)) {
-                String errMsg = "Request to " + req.getRequestURI() + " has JSON type mismatch, found=" + stripJsonType;
+            if(!jsonType.equals(uriType)) {
+                String errMsg = "Request to /api/event/expected=" + uriType +
+                        " has JSON type mismatch, found=" + jsonType;
                 logger.debug(errMsg);
                 // wtf? deprecated?
                 throw new JsonMappingException(errMsg);
             }
-            logger.debug("Request to " + req.getRequestURI() + " has JSON type match");
+            logger.debug("Request to /api/event/expected=" + uriType + " has JSON type match");
         }
         else {
-            logger.debug("Request to " + req.getRequestURI() + " has JSON type NOT found");
-            json = json.substring(0, json.length()-1).concat(",\"type\":" + urlType + "}");
+            logger.debug("Request to /api/event/expected=" + uriType + " has JSON type NOT found");
+            json = json.substring(0, json.length()-1).concat(",\"type\":\"" + uriType + "\"}");
         }
 
         return json;
