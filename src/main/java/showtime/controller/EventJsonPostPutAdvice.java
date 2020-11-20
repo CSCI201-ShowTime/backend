@@ -35,7 +35,7 @@ public class EventJsonPostPutAdvice extends RequestBodyAdviceAdapter {
 
     Logger logger = LoggerFactory.getLogger(EventJsonPostPutAdvice.class);
 
-    private static final Pattern pattern = Pattern.compile("\"type\"\\s*:\\s*.*[,}]");
+    private static final Pattern pattern = Pattern.compile("\"type\"\\s*:\\s*.*?[,}]");
     private static final Pattern prefix = Pattern.compile("\"type\"\\s*:\\s*");
 
     @Autowired

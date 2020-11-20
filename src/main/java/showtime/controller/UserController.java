@@ -101,6 +101,27 @@ public class UserController {
         }
     }
 
+    @GetMapping("/userinfo")
+    public ResponseEntity<?> getUserinfo(Principal principal) {
+        // locate current user from Principal
+        // as suggested in Spring Security topical guide
+        Authentication authentication = (Authentication) principal;
+        // no credentials, perhaps missing Cookie?
+        if(authentication == null) {
+            return new ResponseEntity<>("Unauthorized access from non-login user.", HttpStatus.UNAUTHORIZED);
+        }
+        
+        String email = principal.getName();
+        Optional<User> userOpt = userRepo.findUserByEmail(email);
+        if(userOpt.isPresent()) {
+            return new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
+        }
+        
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
     /**
      * Responds to "/api/user.POST" requests. Registers a new user in the database.
      *
