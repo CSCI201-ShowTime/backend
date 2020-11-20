@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import showtime.model.Budget;
+import showtime.model.Diary;
+import showtime.model.DurationEvent;
 import showtime.model.Event;
+import showtime.model.Reminder;
 import showtime.repository.BudgetRepository;
 import showtime.repository.DiaryRepository;
 import showtime.repository.DurationEventRepository;
@@ -33,6 +36,8 @@ import showtime.service.EventUpdateService;
 import showtime.service.ReminderSpecBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -141,21 +146,13 @@ public class EventController {
         return new ResponseEntity<>(eventList.getContent(), HttpStatus.OK);
     }
     
-    @GetMapping({"/topEvent"})
-    public ResponseEntity<?> getTop10EventByCriteria(
+    /**
+     * Return Event that belongs to the current user
+     */
+    @GetMapping({"/personalEvent"})
+    public ResponseEntity<?> getPersonalEventByCriteria(
             HttpServletRequest request,
             @RequestParam MultiValueMap<String, String> params) {
-    	// userid = 101, 
-    	// userid != 101, visibility 
-        // "/api/event/rawevent"
-        String requestURI = request.getRequestURI();
-        
-        // Reminder Test
-        if (requestURI.equals("/api/event/reminder")) {
-    		//List<Reminder> reminderList = reminderRepo.readTop3ByOrderByPriorityDesc();
-    		//return new ResponseEntity<>(reminderList, HttpStatus.OK);
-    	}
-        
         
         List<String> repoURIs = Arrays.asList("/api/event/durationevent", "/api/event/diary", "/api/event/budget");
         @SuppressWarnings("unchecked")
@@ -175,7 +172,41 @@ public class EventController {
 
         return new ResponseEntity<>(eventList, HttpStatus.OK);
     }
-
+    
+    /**
+     * Return Public Event that visibility >= 1
+     */
+    @GetMapping({"/publicEvent"})
+    public ResponseEntity<?> getPublicEventByCriteria(
+            HttpServletRequest request,
+            @RequestParam MultiValueMap<String, String> params) {
+    	
+        String currentUserId = params.getFirst("userid");
+        params.remove("userid");
+        // System.out.println("Current User Id Remove" + currentUserId);
+        
+        List<String> repoURIs = Arrays.asList("/api/event/durationevent", "/api/event/diary", "/api/event/budget");
+        @SuppressWarnings("unchecked")
+        List<Event> eventList = repos.get("/api/event/durationevent").findAll(
+                specs.get("/api/event/durationevent").get().fromMultiValueMap(params).build()
+                ,Sort.by(Sort.Direction.ASC, "start")
+        );
+        
+        
+        // System.out.println("My List" + eventList.toString());
+        List<Event> returnList = new ArrayList<Event>();
+        for (Event event : eventList) {
+        	if (Integer.toString(event.getUserid()).equals(currentUserId) || event.getVisibility() < 1) {
+        		// System.out.println("To Remove" + event.toString());
+        	} else {
+        		// System.out.println("To Keep" + event.toString());
+        		returnList.add(event);
+        	}
+        }
+        
+        return new ResponseEntity<>(returnList, HttpStatus.OK);
+    }
+    
     /**
      * Responds to "/api/event/POST" requests. Creates a new {@link Event} in the database.
      */
@@ -184,12 +215,41 @@ public class EventController {
 
         String requestURI = request.getRequestURI();
         logger.debug("Request POST to " + requestURI + " with RequestBody=" + event);
-
+        // System.out.println(event.toString());
         // because of auto increment, no duplicates will exist
         Event saved = (Event) repos.get(requestURI).save(event);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
+    
+    
+    /*
+    @PostMapping("/durationevent")
+    public ResponseEntity<DurationEvent> createDurationEvent(@RequestBody DurationEvent dEvent) {
+        DurationEvent saved = (DurationEvent) repos.get("/api/event/durationevent").save(dEvent);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
 
+    @PostMapping("/reminder")
+    public ResponseEntity<Reminder> createReminder(@RequestBody Reminder reminder) {
+    	System.out.println(reminder.toString());
+        Reminder saved = (Reminder) repos.get("/api/event/reminder").save(reminder);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/diary")
+    public ResponseEntity<Diary> createDiary(@RequestBody Diary diary) {
+    	System.out.println(diary.toString());
+        Diary saved = (Diary) repos.get("/api/event/diary").save(diary);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/budget")
+    public ResponseEntity<Budget> createBudget(@RequestBody Budget budget) {
+
+        Budget saved = (Budget) repos.get("/api/event/budget").save(budget);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+	
     /**
      * Responds to "/api/event/PUT" requests. Updates an existing {@link Event}
      * in the database.
