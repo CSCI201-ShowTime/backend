@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -132,7 +133,7 @@ public class UserController {
      *         {@code 500 INTERNAL SERVER ERROR} if server cannot handle the request
      */
     @PostMapping("/user")
-    public ResponseEntity<?> registerNewUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
         // creates User with custom Jackson deserializer, or custom @JsonSetter annotations
         logger.debug(user.toString());
         Optional<User> userOpt = userRepo.findUserByEmail(user.getEmail());
@@ -168,5 +169,30 @@ public class UserController {
     public ResponseEntity<?> handleJsonProcessingException(JsonProcessingException jpe) {
         logger.debug(jpe.getMessage() + " 400 BAD REQUEST");
         return new ResponseEntity<>(jpe.getMessage() + " at \"/user.POST\".", HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * A temporary solution for updating users.
+     */
+    @PutMapping("/user")
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        // creates User with custom Jackson deserializer, or custom @JsonSetter annotations
+        logger.debug(user.toString());
+        Optional<User> userOpt = userRepo.findUserByEmail(user.getEmail());
+        // user exists
+        if(userOpt.isPresent()) {
+            User userGet = userOpt.get();
+            userGet.setFname(user.getFname());
+            userGet.setLname(user.getLname());
+            if(user.getPassword() != null && user.getPassword() != "") {
+                userGet.setPassword(user.getPassword());
+            }
+            User userUpdated = userRepo.save(userGet);
+
+            return new ResponseEntity<>(userUpdated, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

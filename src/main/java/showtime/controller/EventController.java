@@ -135,7 +135,7 @@ public class EventController {
 
         // "/api/event/rawevent"
         String requestURI = request.getRequestURI();
-        logger.debug(requestURI);
+        logger.debug("Request GET to " + requestURI);
 
         @SuppressWarnings("unchecked")
         Slice<Event> eventList = repos.get(requestURI).findAll(
@@ -211,7 +211,7 @@ public class EventController {
      * Responds to "/api/event/POST" requests. Creates a new {@link Event} in the database.
      */
     @PostMapping({"/durationevent", "/reminder", "/diary", "/budget"})
-    public ResponseEntity<Event> createEventTest(HttpServletRequest request, @RequestBody Event event) {
+    public ResponseEntity<Event> createEvent(HttpServletRequest request, @RequestBody Event event) {
 
         String requestURI = request.getRequestURI();
         logger.debug("Request POST to " + requestURI + " with RequestBody=" + event);
@@ -226,7 +226,7 @@ public class EventController {
      * in the database.
      */
     @PutMapping({"/durationevent", "/reminder", "/diary", "/budget"})
-    public ResponseEntity<? extends Event> updateBudget(HttpServletRequest request, @RequestBody Event event) {
+    public ResponseEntity<? extends Event> updateEvent(HttpServletRequest request, @RequestBody Event event) {
 
         String requestURI = request.getRequestURI();
         logger.debug("Request PUT to " + requestURI + "with RequestBody=" + event);

@@ -6,11 +6,11 @@ Despite the best effort, in the case where an HTML file must be changed,
 a change log will be attached to the bottom of this list.
 
 #### Version
-Backend: v0.6.8 TORTELLI
-- Updated regex in `EventJsonPostPutAdvice`.
+Backend: v0.6.10 TORTELLI
+- Added `user/POST`. Not tested.
 
 Known issues
-- Security is temporarily disabled.
+- None.
 
 #### General Instructions
 1. Import MySQL database from `showtime_wevent_20201118.sql` file.
